@@ -1,0 +1,133 @@
+# Portfolio — Nguyễn Ngọc Nam Anh
+
+Trang portfolio một trang, dựng theo bộ design handoff "Industry".
+Next.js 16 (App Router) + TypeScript + CSS thuần. Video nhúng từ YouTube.
+
+## Chạy trên máy
+
+```bash
+npm install
+npm run dev
+```
+
+Mở http://localhost:3000
+
+Các lệnh khác: `npm run build` (build thật), `npm run lint` (kiểm lỗi code).
+
+---
+
+## Việc bạn sẽ làm thường xuyên
+
+### 1. Thêm / sửa video
+
+Mở đúng **một** file: `src/data/videos.ts`
+
+Mỗi dự án là một khối như sau — copy khối cũ, dán xuống dưới, sửa lại nội dung:
+
+```ts
+{
+  id: "shopee-gil-le",          // mã riêng, không trùng, viết-liền-có-gạch-ngang
+  title: "Shopee x Gil Lê",     // tên hiện trên thẻ
+  client: "Shopee",             // khách hàng
+  role: "Camera Operator",      // vai trò của bạn trong dự án
+  category: "commercial",       // xem danh sách bên dưới
+  duration: "01:20",            // phút:giây — để "" nếu không muốn hiện
+  youtubeId: "aqz-KE-bpKQ",     // xem cách lấy bên dưới
+},
+```
+
+**Thứ tự trong file = thứ tự trên trang.** Dự án mạnh nhất để lên đầu.
+
+**Cách lấy `youtubeId`:** mở video trên YouTube, nhìn thanh địa chỉ:
+
+```
+https://www.youtube.com/watch?v=aqz-KE-bpKQ
+                                └──── đây, 11 ký tự ────┘
+https://youtu.be/aqz-KE-bpKQ
+                 └──── hoặc đây ────┘
+```
+
+Chỉ dán 11 ký tự đó, **không dán cả link**.
+
+**`category` chọn một trong:** `commercial` · `social` · `mv` · `short` · `doc`
+(Đổi tên hiển thị của các nhóm ở đầu file, mục `CATEGORY_LABELS`.
+Nhóm nào chưa có video nào thì tự động không hiện trong bộ lọc.)
+
+Ảnh thumbnail **không cần làm** — hệ thống tự lấy từ YouTube theo id.
+
+### 2. Sửa thông tin liên hệ / tên / vai trò
+
+Mở `src/data/profile.ts`. Đây là **nơi duy nhất** chứa email, số điện thoại,
+tên và dòng vai trò — sửa ở đây là đổi khắp trang.
+
+### 3. Thêm ảnh bìa và ảnh chân dung
+
+1. Chép 2 file ảnh vào thư mục `public/images/`
+   - ảnh bìa: nằm ngang, nên rộng khoảng 2000px
+   - ảnh chân dung: vuông, khoảng 400×400px
+2. Mở `src/data/profile.ts`, sửa 2 dòng cuối:
+
+```ts
+coverImage: "/images/cover.jpg",
+avatarImage: "/images/avatar.jpg",
+```
+
+Khi còn để `null` thì trang vẽ ô kẻ sọc thay chỗ (như bản design mẫu).
+
+---
+
+## Đưa lên mạng (Vercel, miễn phí)
+
+Lần đầu:
+
+1. Tạo repo trống trên GitHub (để **Private** cũng được).
+2. Trong thư mục này chạy:
+
+```bash
+git remote add origin https://github.com/<tên-tài-khoản>/<tên-repo>.git
+git push -u origin main
+```
+
+3. Vào https://vercel.com → **Add New → Project** → chọn repo vừa đẩy lên →
+   **Deploy**. Không cần chỉnh gì, Vercel tự nhận Next.js.
+
+Từ lần sau, mỗi khi sửa xong:
+
+```bash
+git add -A
+git commit -m "them video moi"
+git push
+```
+
+Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
+
+---
+
+## Bản đồ mã nguồn
+
+| Đường dẫn | Việc của nó |
+|---|---|
+| `src/data/videos.ts` | Danh sách dự án — **file bạn sửa nhiều nhất** |
+| `src/data/profile.ts` | Tên, vai trò, email, điện thoại, ảnh |
+| `src/lib/videos.ts` | Cửa duy nhất giữa dữ liệu và giao diện. Sau này chuyển sang CMS thì chỉ sửa file này, không đụng giao diện |
+| `src/lib/youtube.ts` | Suy ra link nhúng và link thumbnail từ id |
+| `src/styles/industry.css` | Design system gốc — **không sửa**, để còn đồng bộ lại được khi design cập nhật |
+| `src/app/globals.css` | Phần bổ sung của riêng dự án (bề rộng trang, màn hình nhỏ) |
+| `src/components/` | Các thành phần giao diện |
+
+### Vài quyết định kỹ thuật đáng nhớ
+
+- **Iframe YouTube chỉ được tạo khi bấm mở video**, không nạp sẵn 12 cái —
+  đây là lý do trang tải nhanh.
+- Nhúng qua `youtube-nocookie.com` nên YouTube không đặt cookie theo dõi
+  người xem cho tới khi họ thật sự bấm play.
+- Font Barlow được **tự host** qua `next/font` (đã bỏ dòng `@import` Google
+  Fonts trong `industry.css`) — không có request nào rời khỏi máy chủ của bạn,
+  và chữ không bị nhảy khi tải.
+- Thumbnail lấy bản `maxresdefault`; video nào không có bản HD thì tự động
+  lùi về `mqdefault` (vẫn đúng khung 16:9).
+- Ảnh thumbnail bị phủ lớp xanh thép theo đúng design system, nhưng **rê chuột
+  vào thì trở về màu thật** để khách thấy được màu phim. Muốn bám 100% design
+  gốc thì xoá 2 rule `.reveal-on-hover` trong `src/app/globals.css`.
+- Popup video đóng được bằng Esc, bằng nút X và bằng bấm ra nền; khoá cuộn
+  trang phía sau và trả con trỏ bàn phím về đúng thẻ video đã bấm.

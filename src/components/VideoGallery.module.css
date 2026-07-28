@@ -1,0 +1,48 @@
+.section {
+  padding: 0 var(--page-pad) var(--space-8);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.heading {
+  margin: 0;
+  font-size: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6) var(--space-4);
+}
+
+.loadMore {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--page-pad) var(--space-8);
+}
+
+.loadMoreButton {
+  gap: 8px;
+}
+
+.empty {
+  padding: var(--space-8) 0;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--color-neutral-700);
+}
+
+@media (max-width: 480px) {
+  .grid {
+    /* 280px minimum plus the corner marks overflows a 375px screen once the
+       page padding is taken out — drop to a single column instead. */
+    grid-template-columns: 1fr;
+  }
+}

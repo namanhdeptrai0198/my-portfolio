@@ -1,0 +1,72 @@
+import Image from "next/image";
+import { Mail, MapPin, Phone } from "lucide-react";
+import { profile } from "@/data/profile";
+import { BlueprintCorners } from "./Blueprint";
+import styles from "./ProfileHeader.module.css";
+
+/** Lucide at stroke-width 1.5 at interface size, per the design system. */
+const ICON = { size: 15, strokeWidth: 1.5 } as const;
+
+export function ProfileHeader() {
+  return (
+    <header>
+      <div className={`${styles.cover} blueprint duotone ${profile.coverImage ? "" : "stripe-fill"}`}>
+        <BlueprintCorners />
+        {profile.coverImage ? (
+          <Image
+            src={profile.coverImage}
+            alt=""
+            fill
+            priority
+            sizes="(max-width: 1280px) 100vw, 1280px"
+            className={styles.coverImage}
+          />
+        ) : (
+          <p className="stripe-label">[ cover still — signature frame ]</p>
+        )}
+      </div>
+
+      <div className={styles.avatarRow}>
+        <div className={`${styles.avatar} blueprint duotone`}>
+          <BlueprintCorners />
+          {profile.avatarImage ? (
+            <Image
+              src={profile.avatarImage}
+              alt={profile.name}
+              fill
+              priority
+              sizes="96px"
+              className={styles.avatarImage}
+            />
+          ) : (
+            <span className={styles.initials} aria-hidden="true">
+              {profile.initials}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className={styles.identity}>
+        <h1 className={styles.name}>{profile.name}</h1>
+        <p className={styles.role}>{profile.role}</p>
+
+        <p className={`${styles.contactRow} ${styles.location}`}>
+          <MapPin {...ICON} aria-hidden="true" />
+          <span>{profile.location}</span>
+        </p>
+
+        <p className={styles.contactRow}>
+          <Mail {...ICON} aria-hidden="true" />
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+        </p>
+
+        <p className={`${styles.contactRow} ${styles.lastRow}`}>
+          <Phone {...ICON} aria-hidden="true" />
+          <a href={`tel:${profile.phoneHref}`}>{profile.phoneLabel}</a>
+        </p>
+      </div>
+
+      <div className={`hr ${styles.rule}`} />
+    </header>
+  );
+}

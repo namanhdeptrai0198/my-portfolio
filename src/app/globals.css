@@ -1,0 +1,114 @@
+/* The design system first, then this project's own additions. Nothing below
+   restyles a design-system component — it only fills gaps the handoff left
+   open (page width, small screens, motion). */
+@import "../styles/industry.css";
+
+:root {
+  /* Re-point the system's font tokens at the self-hosted next/font families
+     declared in app/layout.tsx. The literal names stay as a fallback. */
+  --font-heading: var(--font-heading-src), "Barlow Condensed", system-ui, sans-serif;
+  --font-body: var(--font-body-src), "Barlow", system-ui, sans-serif;
+
+  /* The mock was drawn at a 1440px preview with no max width. Left unbounded,
+     the auto-fit grid runs to nine columns on a large display and the identity
+     block strands itself in the far corner — so the page is capped near the
+     width it was designed at. */
+  --page-max: 1280px;
+  --page-pad: var(--space-6);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+a {
+  text-decoration: none;
+}
+
+/* The wireframe fill standing in for a photograph that has not been supplied
+   yet — the same 135° hatch used throughout the mock. */
+.stripe-fill {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--color-neutral-300) 0px,
+    var(--color-neutral-300) 2px,
+    var(--color-neutral-200) 2px,
+    var(--color-neutral-200) 22px
+  );
+}
+
+.stripe-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  text-align: center;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-neutral-700);
+}
+
+/* The system duotones every photograph. On a cinematographer's reel that hides
+   the one thing a client is looking for — the grade — so the accent wash lifts
+   on hover and the frame shows its true colour. Delete these two rules to
+   follow the design system to the letter. */
+.reveal-on-hover::after {
+  transition: opacity 240ms ease;
+}
+.card:hover .reveal-on-hover::after,
+.card:focus-visible .reveal-on-hover::after {
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* The mock's fixed 20px page padding is generous on a 375px phone, and a 300px
+   cover eats most of the first screen. */
+@media (max-width: 480px) {
+  :root {
+    --page-pad: var(--space-4);
+  }
+}
+
+/* `.seg` clips its overflow, so on a narrow screen a fifth or sixth category
+   would silently disappear rather than wrap. Let the strip scroll instead. */
+@media (max-width: 640px) {
+  .seg {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .seg::-webkit-scrollbar {
+    display: none;
+  }
+  .seg-opt {
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,119 @@
+/* Cover still, overlapping avatar and the identity + contact block.
+   Geometry follows "Camera Portfolio.dc.html" lines 23–55. */
+
+.cover {
+  position: relative;
+  height: 300px;
+}
+
+.coverImage {
+  object-fit: cover;
+}
+
+.avatarRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+  padding-inline: var(--page-pad);
+  /* Pulls the avatar up over the cover exactly as in the mock. */
+  margin-top: -46px;
+}
+
+.avatar {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex: none;
+  background: var(--color-neutral-800);
+  /* Above the cover it overlaps. */
+  z-index: 2;
+}
+
+.avatarImage {
+  object-fit: cover;
+}
+
+.initials {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 28px;
+  color: var(--color-bg);
+}
+
+.identity {
+  padding: var(--space-4) var(--page-pad) 0;
+}
+
+.name {
+  margin: 0 0 4px;
+}
+
+.role {
+  margin: 0 0 var(--space-3);
+  font-size: 14px;
+  font-weight: 600;
+  /* Body-size text in the accent must use a deep ramp step for contrast —
+     the base accent only clears 3:1. */
+  color: var(--color-accent-700);
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.contactRow svg {
+  flex: none;
+}
+
+.contactRow a {
+  color: var(--color-accent-700);
+}
+
+.contactRow a:hover {
+  text-decoration: underline;
+}
+
+.location {
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
+}
+
+.lastRow {
+  margin-bottom: var(--space-4);
+}
+
+.rule {
+  margin: var(--space-8) var(--page-pad) var(--space-4);
+}
+
+@media (max-width: 480px) {
+  .cover {
+    height: 200px;
+  }
+
+  .avatarRow {
+    margin-top: -38px;
+  }
+
+  .avatar {
+    width: 76px;
+    height: 76px;
+  }
+
+  .initials {
+    font-size: 22px;
+  }
+
+  .name {
+    font-size: 34px;
+  }
+}
