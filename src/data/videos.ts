@@ -43,7 +43,7 @@ export type Video = {
 export const videos: Video[] = [
   {
     id: "lg-another-saigon",
-    title: "Another Saigon",
+    title: "Another Saigon by LG Video",
     client: "LG",
     role: "Camera Operator, VFX Animation",
     category: "commercial",
@@ -52,7 +52,7 @@ export const videos: Video[] = [
   },
   {
     id: "geely-x-chi-pu",
-    title: "Geely x Chi Pu",
+    title: "Geely x ChiPu",
     client: "Geely",
     role: "Camera Operator",
     category: "commercial",
@@ -101,7 +101,7 @@ export const videos: Video[] = [
   },
   {
     id: "dove-deo-summer-01",
-    title: "Deo Summer 01",
+    title: "Dove Deo Summer 01",
     client: "Dove",
     role: "Camera Operator",
     category: "commercial",
@@ -111,7 +111,7 @@ export const videos: Video[] = [
   },
   {
     id: "dove-deo-summer-02",
-    title: "Deo Summer 02",
+    title: "Dove Deo Summer 02",
     client: "Dove",
     role: "Camera Operator",
     category: "commercial",
@@ -121,7 +121,7 @@ export const videos: Video[] = [
   },
   {
     id: "closeup-hailee",
-    title: "Hailee",
+    title: "CLOSEUP HAILEE",
     client: "Closeup",
     role: "Editor",
     category: "commercial",
@@ -131,7 +131,7 @@ export const videos: Video[] = [
   },
   {
     id: "panasonic-ac-heatpump",
-    title: "AC Heatpump",
+    title: "Panasonic AC HEATPUMP",
     client: "Panasonic",
     role: "Editor",
     category: "commercial",
@@ -141,7 +141,7 @@ export const videos: Video[] = [
   },
   {
     id: "tiktok-shop-voucher-extra",
-    title: "Voucher Extra — Aug 2025",
+    title: "TikTokShop Voucher Extra Aug 2025",
     client: "TikTok Shop",
     role: "Camera Operator",
     category: "social",
@@ -151,7 +151,7 @@ export const videos: Video[] = [
   },
   {
     id: "tiktok-shop-10-10-bumper",
-    title: "10.10 Bumper",
+    title: "[BUMPER] Tiktok Shop 10.10",
     client: "TikTok Shop",
     role: "Editor",
     category: "social",
