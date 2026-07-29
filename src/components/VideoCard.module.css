@@ -30,30 +30,6 @@
   z-index: 1;
 }
 
-.playMark {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--color-bg);
-  /* A full disc rather than the 4px the rest of the page uses — on a play
-     affordance the circle is what reads as "press me". */
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--color-neutral-900) 30%, transparent);
-  transition: background 240ms ease;
-}
-
-/* A triangle centred by its bounding box looks left-heavy inside a circle;
-   nudge it onto the optical centre. */
-.playMark svg {
-  transform: translateX(1.5px);
-}
-
-.card:hover .playMark {
-  background: color-mix(in srgb, var(--color-neutral-900) 55%, transparent);
-}
-
 .duration {
   position: absolute;
   right: 8px;

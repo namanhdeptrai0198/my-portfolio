@@ -22,22 +22,55 @@
     display: grid;
     grid-template-columns: 300px minmax(0, 1fr);
     gap: var(--space-6);
-    padding-inline: var(--space-6);
+    /* Both columns start at the same y — the top gutter belongs to the grid,
+       not to one of its children. */
+    padding: var(--space-6) var(--space-6) 0;
   }
 
-  /* ProfileCard's root element. `align-self: start` is load-bearing: it keeps
-     the box at its content height so it has room to travel down the full-height
-     grid area behind it. Stretched, it would have nowhere to stick to. */
-  .body > header {
+  /* `align-self: start` is load-bearing: it keeps the box at its content
+     height so it has room to travel down the full-height grid area behind
+     it. Stretched, it would have nowhere to stick to. */
+  .identity {
     position: sticky;
     top: var(--space-6);
     align-self: start;
-    padding-top: var(--space-6);
+
+    /* The same hairline every card in the reel carries. Side by side, bare
+       text next to a grid of bordered boxes reads as two different systems;
+       inside the border the column becomes one tall card — image on top,
+       details below — which is exactly a video card's anatomy. */
+    border: 1px solid var(--color-divider);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+
+    /* ProfileCard takes its inline padding from this token, and `.body` zeroed
+       it so the two columns could share one outer gutter. Inside a bordered
+       box the text has to come off the edge again — at the same `--space-3`
+       the design system gives every `.card`, so the reel's cards and this one
+       inset their text by the same amount. */
+    --page-pad: var(--space-3);
+  }
+
+  /* "Nguyễn Ngọc Nam Anh" needs 323px to set on one line at the h1's 42px, and
+     this column only offers 277.6px of text width. Widening the column to fit
+     was the wrong lever — it made the card too tall to take in at a glance and
+     stole a whole track from the reel. Shrinking the type costs nothing: at
+     34px the name measures 261px, leaving 16px of headroom so it cannot drop
+     to two lines while the webfont is still swapping in. */
+  .identity h1 {
+    font-size: 34px;
+  }
+
+  /* CoverBanner is always the first child — square it off into a portrait
+     rather than the wide crop it uses full-bleed below 900px. */
+  .identity > :first-child {
+    height: auto;
+    aspect-ratio: 1;
   }
 
   /* The rule under the identity block only separates it from the reel when the
      reel is below it. Side by side, the gap does that job. */
-  .body > header :global(.hr) {
+  .identity :global(.hr) {
     display: none;
   }
 

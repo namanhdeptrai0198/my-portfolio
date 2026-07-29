@@ -1,0 +1,75 @@
+/* Only ever shown in the two-column layout — page.module.css turns that on
+   at 900px, so this mirrors that threshold exactly. Below it the identity
+   block already carries the cover photo (see CoverBanner + page.module.css),
+   so this would be a second, redundant hero. */
+.button {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .button {
+    display: block;
+    /* Inset by the same gutter `.body` uses, so this strip's edges line up with
+       the two columns under it. The width has to be spelled out: a <button>
+       shrink-wraps to its content even at `display: block`, and the frame
+       inside has no intrinsic width to wrap to — `auto` collapses it to 2px. */
+    width: calc(100% - var(--space-6) * 2);
+    margin: var(--space-6) var(--space-6) 0;
+    padding: 0;
+    overflow: hidden;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+}
+
+.frame {
+  position: relative;
+  height: 380px;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-neutral-900) 75%, transparent) 0%,
+    transparent 45%
+  );
+}
+
+.play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-4) var(--space-6);
+  color: var(--color-bg);
+}
+
+.title {
+  text-transform: uppercase;
+  font-size: 22px;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 13px;
+  opacity: 0.85;
+}

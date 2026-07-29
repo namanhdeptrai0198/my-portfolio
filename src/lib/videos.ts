@@ -1,4 +1,4 @@
-import { videos, type Orientation, type Video } from "@/data/videos";
+import { spotlightId, videos, type Orientation, type Video } from "@/data/videos";
 
 export type { Orientation, Video };
 
@@ -29,6 +29,15 @@ const ORIENTATION_LABELS: Record<Orientation, string> = {
  */
 export function getVideos(): Video[] {
   return videos;
+}
+
+/**
+ * The video for the desktop spotlight. `null` if `spotlightId` doesn't match
+ * anything in the reel, so a typo there just drops the spotlight rather than
+ * breaking the page.
+ */
+export function getSpotlight(): Video | null {
+  return videos.find((v) => v.id === spotlightId) ?? null;
 }
 
 /**

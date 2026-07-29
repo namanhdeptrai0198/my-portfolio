@@ -29,6 +29,10 @@ export type Video = {
   orientation?: Orientation;
 };
 
+/** The video shown in the desktop spotlight above the reel. Change the id to
+ *  put a different piece there — it stays in the reel below either way. */
+export const spotlightId = "geely-x-chi-pu";
+
 /**
  * The reel. Order here is the order on the page — put the strongest work first.
  */

@@ -69,9 +69,11 @@ Nhóm nào chưa có video nào thì tự động không hiện trong bộ lọc
 Mở `src/data/profile.ts`. Đây là **nơi duy nhất** chứa email, số điện thoại,
 tên và dòng vai trò — sửa ở đây là đổi khắp trang.
 
-### 3. Đổi ảnh bìa / thêm ảnh chân dung
+### 3. Đổi ảnh bìa / video spotlight / ảnh chân dung
 
-**Ảnh bìa đã có** (`public/images/cover.jpg`). Muốn thay ảnh khác:
+**Ảnh bìa đã có** (`public/images/cover.jpg`). Nó hiện hai kiểu tuỳ màn hình:
+dưới 900px là dải ngang full-bleed, từ 900px trở lên nó được cắt vuông vào
+đầu cột trái. Muốn thay ảnh khác:
 
 1. Thu nhỏ ảnh gốc trước khi chép vào — máy ảnh cho ra file 9MB, trang không
    cần quá 2400px:
@@ -80,9 +82,15 @@ tên và dòng vai trò — sửa ở đây là đổi khắp trang.
 sips -Z 2400 -s formatOptions 82 ~/duong-dan/anh-goc.jpg --out public/images/cover.jpg
 ```
 
-2. Ảnh bìa là khung ngang rất dẹt nên phần trên dưới bị cắt nhiều. Nếu mặt bị
-   cắt, chỉnh `object-position` trong `src/components/ProfileHeader.module.css`
-   — số càng nhỏ thì khung càng lấy phần trên của ảnh.
+2. Nếu mặt bị cắt, chỉnh `object-position` trong
+   `src/components/CoverBanner.module.css` — số càng nhỏ thì khung càng lấy
+   phần trên của ảnh. Vì ảnh dùng chung cho cả hai kiểu cắt (ngang và vuông),
+   kiểm tra lại cả hai cỡ màn hình sau khi đổi số.
+
+**Video spotlight** (dải lớn phía trên cùng, chỉ hiện từ 900px trở lên): mở
+`src/data/videos.ts`, sửa `spotlightId` thành `id` của video muốn đưa lên đầu.
+Video đó vẫn nằm nguyên trong reel bên dưới — spotlight chỉ là một cách hiển
+thị thêm, không phải cắt nó ra khỏi danh sách.
 
 **Ảnh chân dung**: chép ảnh vuông (~400×400) vào `public/images/`, rồi mở
 `src/data/profile.ts` sửa `avatarImage: "/images/avatar.jpg"`. Khi còn `null`
@@ -140,8 +148,12 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
   và chữ không bị nhảy khi tải.
 - Thumbnail lấy bản `maxresdefault`; video nào không có bản HD thì tự động
   lùi về `mqdefault` (vẫn đúng khung 16:9).
-- Ảnh thumbnail bị phủ lớp xanh thép theo đúng design system, nhưng **rê chuột
-  vào thì trở về màu thật** để khách thấy được màu phim. Muốn bám 100% design
-  gốc thì xoá 2 rule `.reveal-on-hover` trong `src/app/globals.css`.
+- Design system phủ lớp xanh thép lên mọi ảnh, nhưng thumbnail thì **không** —
+  màu và ánh sáng chính là thứ khách cần thấy ở một người quay phim, và trên
+  điện thoại không có thao tác rê chuột để lộ màu thật.
 - Popup video đóng được bằng Esc, bằng nút X và bằng bấm ra nền; khoá cuộn
   trang phía sau và trả con trỏ bàn phím về đúng thẻ video đã bấm.
+- Từ 900px trở lên, cột trái (ảnh bìa + thông tin liên hệ) dính lại khi cuộn
+  trang, và một video "spotlight" hiện full-bề-ngang phía trên — bấm vào mở
+  đúng popup như thẻ video thường. Dưới 900px cả hai điều này tắt hẳn: ảnh bìa
+  quay lại full-bleed, spotlight không render, layout y hệt bản gốc.

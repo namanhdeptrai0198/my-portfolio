@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import { Play } from "lucide-react";
 import type { Video } from "@/lib/videos";
-import { fallbackThumbnailUrl, thumbnailUrl } from "@/lib/youtube";
+import { useThumbnailSrc } from "@/lib/useThumbnailSrc";
+import { PlayMark } from "./PlayMark";
 import styles from "./VideoCard.module.css";
 
 type Props = {
@@ -13,19 +12,7 @@ type Props = {
 };
 
 export function VideoCard({ video, onOpen }: Props) {
-  /* maxresdefault.jpg only exists when the upload had an HD source, and a
-     video YouTube has not finished processing has no still at all — so the
-     walk has to end at "none" rather than retrying the fallback forever. */
-  const [thumbStage, setThumbStage] = useState<"max" | "fallback" | "none">(
-    video.youtubeId ? "max" : "none",
-  );
-
-  const thumbSrc =
-    thumbStage === "max"
-      ? thumbnailUrl(video.youtubeId)
-      : thumbStage === "fallback"
-        ? fallbackThumbnailUrl(video.youtubeId)
-        : null;
+  const { src: thumbSrc, onError } = useThumbnailSrc(video.youtubeId);
 
   return (
     <button
@@ -52,9 +39,7 @@ export function VideoCard({ video, onOpen }: Props) {
             fill
             sizes="(max-width: 614px) 100vw, (max-width: 899px) 48vw, (max-width: 934px) 62vw, (max-width: 1228px) 36vw, 300px"
             className={styles.thumbImage}
-            onError={() =>
-              setThumbStage((stage) => (stage === "max" ? "fallback" : "none"))
-            }
+            onError={onError}
           />
         ) : null}
 
@@ -66,10 +51,8 @@ export function VideoCard({ video, onOpen }: Props) {
         )}
 
         {video.youtubeId ? (
-          <span className={styles.play} aria-hidden="true">
-            <span className={styles.playMark}>
-              <Play size={18} fill="var(--color-bg)" stroke="none" />
-            </span>
+          <span className={styles.play}>
+            <PlayMark size={48} />
           </span>
         ) : null}
 
