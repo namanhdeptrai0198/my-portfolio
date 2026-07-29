@@ -13,7 +13,9 @@ import { VideoCard } from "./VideoCard";
 import { VideoModal } from "./VideoModal";
 import styles from "./VideoGallery.module.css";
 
-const PAGE_SIZE = 6;
+/** Enough to fill the first screen; every "Load more" adds a shorter run. */
+const INITIAL_COUNT = 6;
+const LOAD_MORE_COUNT = 4;
 
 type Props = {
   videos: Video[];
@@ -27,7 +29,7 @@ type Props = {
  */
 export function VideoGallery({ videos, categories }: Props) {
   const [activeCategory, setActiveCategory] = useState<CategoryKey | "all">("all");
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const matching = useMemo(
@@ -41,7 +43,7 @@ export function VideoGallery({ videos, categories }: Props) {
   function handleCategoryChange(key: CategoryKey | "all") {
     setActiveCategory(key);
     // Changing filter starts the list over, as in the handoff spec.
-    setVisibleCount(PAGE_SIZE);
+    setVisibleCount(INITIAL_COUNT);
   }
 
   return (
@@ -78,7 +80,7 @@ export function VideoGallery({ videos, categories }: Props) {
           <button
             type="button"
             className={`btn btn-secondary ${styles.loadMoreButton}`}
-            onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+            onClick={() => setVisibleCount((count) => count + LOAD_MORE_COUNT)}
           >
             Load more
             <ChevronDown size={15} strokeWidth={1.5} aria-hidden="true" />
