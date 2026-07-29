@@ -27,6 +27,7 @@ export function VideoModal({ video, onClose }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const titleId = useId();
+  const isPortrait = video.orientation === "portrait";
 
   // Move focus in on open, and put it back on the opening card on close.
   useEffect(() => {
@@ -88,7 +89,7 @@ export function VideoModal({ video, onClose }: Props) {
     >
       <div
         ref={dialogRef}
-        className={`dialog ${styles.dialog}`}
+        className={`dialog ${styles.dialog} ${isPortrait ? styles.dialogPortrait : ""}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -108,7 +109,9 @@ export function VideoModal({ video, onClose }: Props) {
           </button>
         </div>
 
-        <div className={styles.frame}>
+        <div
+          className={`${styles.frame} ${isPortrait ? styles.framePortrait : ""}`}
+        >
           {video.youtubeId ? (
             <iframe
               src={embedUrl(video.youtubeId)}

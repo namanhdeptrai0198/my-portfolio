@@ -6,6 +6,14 @@
   width: min(920px, 100%);
 }
 
+/* A 9:16 piece in the wide dialog would sit between two black bars taller than
+   the frame itself. Narrow the dialog to whatever keeps the tall player fully
+   on screen — the 160px covers the backdrop padding, the dialog padding and
+   the title row above the frame. */
+.dialogPortrait {
+  width: min(420px, 100%, calc((100dvh - 160px) * 9 / 16));
+}
+
 .head {
   display: flex;
   justify-content: space-between;
@@ -26,6 +34,10 @@
   position: relative;
   aspect-ratio: 16 / 9;
   background: var(--color-neutral-800);
+}
+
+.framePortrait {
+  aspect-ratio: 9 / 16;
 }
 
 .iframe {

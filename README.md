@@ -33,6 +33,7 @@ Mỗi dự án là một khối như sau — copy khối cũ, dán xuống dư�
   category: "commercial",       // xem danh sách bên dưới
   duration: "01:20",            // phút:giây — để "" nếu không muốn hiện
   youtubeId: "aqz-KE-bpKQ",     // xem cách lấy bên dưới
+  orientation: "portrait",      // CHỈ thêm dòng này nếu video quay dọc
 },
 ```
 
@@ -45,9 +46,16 @@ https://www.youtube.com/watch?v=aqz-KE-bpKQ
                                 └──── đây, 11 ký tự ────┘
 https://youtu.be/aqz-KE-bpKQ
                  └──── hoặc đây ────┘
+https://youtube.com/shorts/aqz-KE-bpKQ
+                           └──── hoặc đây ────┘
 ```
 
 Chỉ dán 11 ký tự đó, **không dán cả link**.
+
+**`orientation`:** video quay dọc (9:16) thì thêm `orientation: "portrait"`,
+popup sẽ mở khung đứng thay vì kẹp video giữa hai dải đen. Video ngang bình
+thường thì **bỏ hẳn dòng này**. Lưu ý: dọc hay ngang không liên quan tới việc
+link là `/shorts/` hay `youtu.be` — nhiều video dọc vẫn đăng dạng thường.
 
 **`category` chọn một trong:** `commercial` · `social` · `mv` · `short` · `doc`
 (Đổi tên hiển thị của các nhóm ở đầu file, mục `CATEGORY_LABELS`.
