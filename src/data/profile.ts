@@ -36,10 +36,11 @@ export const profile: Profile = {
     "Selected work from a Vietnam-based camera operator and editor. Commercials and social campaigns for LG, Geely, Pharmaton, Shopee, 1664 Blanc, Dove, Closeup, Somersby, Panasonic and TikTok Shop.",
 
   /**
-   * TO FILL IN: drop the files into public/images/ and point these at them,
-   * e.g. "/images/cover.jpg" and "/images/avatar.jpg". While they are null the
-   * page draws the blueprint placeholders from the design mock.
+   * Downscaled from ~/Downloads/BTS/DOVE/CNH00637.jpg — the 6301px original is
+   * 9MB and nothing on the page renders wider than 1280.
    */
-  coverImage: null,
+  coverImage: "/images/cover.jpg",
+  /** Drop a square headshot in public/images/ and point this at it to bring
+   *  the avatar row back. */
   avatarImage: null,
 };

@@ -8,6 +8,10 @@
 
 .coverImage {
   object-fit: cover;
+  /* The frame is a 4:3 portrait dropped into a wide banner, so most of its
+     height is cropped away. Centring would take a band across his chest —
+     bias upward to keep his face and the headset in shot. */
+  object-position: center 20%;
 }
 
 .avatarRow {

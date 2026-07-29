@@ -9,7 +9,9 @@ const ICON = { size: 15, strokeWidth: 1.5 } as const;
 export function ProfileHeader() {
   return (
     <header>
-      <div className={`${styles.cover} duotone ${profile.coverImage ? "" : "stripe-fill"}`}>
+      {/* No `duotone` here: the system would wash this flat blue, and the red
+          and blue practicals raking across him are the whole photograph. */}
+      <div className={`${styles.cover} ${profile.coverImage ? "" : "stripe-fill"}`}>
         {profile.coverImage ? (
           <Image
             src={profile.coverImage}

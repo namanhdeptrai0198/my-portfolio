@@ -68,19 +68,24 @@ Nhóm nào chưa có video nào thì tự động không hiện trong bộ lọc
 Mở `src/data/profile.ts`. Đây là **nơi duy nhất** chứa email, số điện thoại,
 tên và dòng vai trò — sửa ở đây là đổi khắp trang.
 
-### 3. Thêm ảnh bìa và ảnh chân dung
+### 3. Đổi ảnh bìa / thêm ảnh chân dung
 
-1. Chép 2 file ảnh vào thư mục `public/images/`
-   - ảnh bìa: nằm ngang, nên rộng khoảng 2000px
-   - ảnh chân dung: vuông, khoảng 400×400px
-2. Mở `src/data/profile.ts`, sửa 2 dòng cuối:
+**Ảnh bìa đã có** (`public/images/cover.jpg`). Muốn thay ảnh khác:
 
-```ts
-coverImage: "/images/cover.jpg",
-avatarImage: "/images/avatar.jpg",
+1. Thu nhỏ ảnh gốc trước khi chép vào — máy ảnh cho ra file 9MB, trang không
+   cần quá 2400px:
+
+```bash
+sips -Z 2400 -s formatOptions 82 ~/duong-dan/anh-goc.jpg --out public/images/cover.jpg
 ```
 
-Khi còn để `null` thì trang vẽ ô kẻ sọc thay chỗ (như bản design mẫu).
+2. Ảnh bìa là khung ngang rất dẹt nên phần trên dưới bị cắt nhiều. Nếu mặt bị
+   cắt, chỉnh `object-position` trong `src/components/ProfileHeader.module.css`
+   — số càng nhỏ thì khung càng lấy phần trên của ảnh.
+
+**Ảnh chân dung**: chép ảnh vuông (~400×400) vào `public/images/`, rồi mở
+`src/data/profile.ts` sửa `avatarImage: "/images/avatar.jpg"`. Khi còn `null`
+thì khối avatar không hiện.
 
 ---
 
