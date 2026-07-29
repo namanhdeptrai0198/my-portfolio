@@ -60,6 +60,26 @@ export const videos: Video[] = [
     youtubeId: "QlVltJShCTA",
   },
   {
+    id: "pharmaton-tet-song-luan",
+    title: "Tết x Song Luân",
+    client: "Pharmaton",
+    role: "Editor",
+    category: "commercial",
+    duration: "01:54",
+    youtubeId: "N3Uk2fkM3wk",
+    orientation: "portrait",
+  },
+  {
+    id: "shopee-dinh-ngoc-diep-01",
+    title: "Đinh Ngọc Diệp 01",
+    client: "Shopee",
+    role: "Camera Operator",
+    category: "social",
+    duration: "01:25",
+    youtubeId: "fMGBr0NjLfk",
+    orientation: "portrait",
+  },
+  {
     id: "1664-blanc-x-wokeup",
     title: "1664 Blanc x WOKEUP",
     client: "1664 Blanc",
@@ -110,6 +130,16 @@ export const videos: Video[] = [
     orientation: "portrait",
   },
   {
+    id: "panasonic-ac-heatpump",
+    title: "AC Heatpump",
+    client: "Panasonic",
+    role: "Editor",
+    category: "commercial",
+    duration: "00:34",
+    youtubeId: "0O2LKaLvzas",
+    orientation: "portrait",
+  },
+  {
     id: "tiktok-shop-voucher-extra",
     title: "Voucher Extra — Aug 2025",
     client: "TikTok Shop",
@@ -127,6 +157,31 @@ export const videos: Video[] = [
     category: "social",
     duration: "00:26",
     youtubeId: "96PIdl2_JiQ",
+    orientation: "portrait",
+  },
+
+  /* These two are last because YouTube has not finished processing them: as of
+     28 Jul 2026 every thumbnail size 404s and the API reports a 0s runtime, so
+     they render as hatched frames. They play fine. Once the stills appear, fill
+     in `duration`, confirm the orientation guess, and move them up the reel. */
+  {
+    id: "shopee-duy-khanh",
+    title: "Duy Khánh",
+    client: "Shopee",
+    role: "Camera Operator",
+    category: "social",
+    duration: "",
+    youtubeId: "BmTqH3iZWGM",
+    orientation: "portrait",
+  },
+  {
+    id: "shopee-dinh-ngoc-diep-02",
+    title: "Đinh Ngọc Diệp 02",
+    client: "Shopee",
+    role: "Camera Operator",
+    category: "social",
+    duration: "",
+    youtubeId: "kSRhcRSaw4U",
     orientation: "portrait",
   },
 ];

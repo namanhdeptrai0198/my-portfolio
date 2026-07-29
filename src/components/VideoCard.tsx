@@ -13,11 +13,19 @@ type Props = {
 };
 
 export function VideoCard({ video, onOpen }: Props) {
-  /* maxresdefault.jpg only exists when the upload had an HD source; mqdefault
-     is generated for every video and keeps the same 16:9 crop. */
-  const [thumbSrc, setThumbSrc] = useState(() =>
-    video.youtubeId ? thumbnailUrl(video.youtubeId) : null,
+  /* maxresdefault.jpg only exists when the upload had an HD source, and a
+     video YouTube has not finished processing has no still at all — so the
+     walk has to end at "none" rather than retrying the fallback forever. */
+  const [thumbStage, setThumbStage] = useState<"max" | "fallback" | "none">(
+    video.youtubeId ? "max" : "none",
   );
+
+  const thumbSrc =
+    thumbStage === "max"
+      ? thumbnailUrl(video.youtubeId)
+      : thumbStage === "fallback"
+        ? fallbackThumbnailUrl(video.youtubeId)
+        : null;
 
   return (
     <button
@@ -43,18 +51,19 @@ export function VideoCard({ video, onOpen }: Props) {
             sizes="(max-width: 625px) 100vw, (max-width: 919px) 50vw, (max-width: 1212px) 33vw, 300px"
             className={styles.thumbImage}
             onError={() =>
-              setThumbSrc(
-                video.youtubeId ? fallbackThumbnailUrl(video.youtubeId) : null,
-              )
+              setThumbStage((stage) => (stage === "max" ? "fallback" : "none"))
             }
           />
-        ) : (
+        ) : null}
+
+        {/* A card with no id is a reel entry still waiting on a link and says
+            so; one that has an id but no still is playable, and reads better as
+            a plain hatched frame than as an apology. */}
+        {video.youtubeId ? null : (
           <span className="stripe-label">[ awaiting YouTube link ]</span>
         )}
 
-        {/* Suppressed on placeholder cards so it does not sit on top of the
-            centred "awaiting link" caption. */}
-        {thumbSrc ? (
+        {video.youtubeId ? (
           <span className={styles.play} aria-hidden="true">
             <span className={styles.playMark}>
               <Play size={18} fill="var(--color-bg)" stroke="none" />
