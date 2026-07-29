@@ -61,7 +61,7 @@ export const videos: Video[] = [
   },
   {
     id: "pharmaton-tet-song-luan",
-    title: "Tết x Song Luân",
+    title: "Pharmaton Tet X Song Luân",
     client: "Pharmaton",
     role: "Editor",
     category: "commercial",
@@ -70,8 +70,8 @@ export const videos: Video[] = [
     orientation: "portrait",
   },
   {
-    id: "shopee-dinh-ngoc-diep-01",
-    title: "Đinh Ngọc Diệp 01",
+    id: "shopee-dinh-ngoc-diep-t04",
+    title: "Teaser Shopee x Đinh Ngọc Diệp T04",
     client: "Shopee",
     role: "Camera Operator",
     category: "social",
@@ -91,7 +91,7 @@ export const videos: Video[] = [
   },
   {
     id: "somersby-escape-tour-quoc-anh",
-    title: "Escape Tour 2025 — Quốc Anh",
+    title: "Somersby escape tour 2025 - Quốc Anh",
     client: "Somersby",
     role: "Camera Operator, Editor",
     category: "commercial",
@@ -159,28 +159,23 @@ export const videos: Video[] = [
     youtubeId: "96PIdl2_JiQ",
     orientation: "portrait",
   },
-
-  /* These two are last because YouTube has not finished processing them: as of
-     28 Jul 2026 every thumbnail size 404s and the API reports a 0s runtime, so
-     they render as hatched frames. They play fine. Once the stills appear, fill
-     in `duration`, confirm the orientation guess, and move them up the reel. */
   {
     id: "shopee-duy-khanh",
-    title: "Duy Khánh",
+    title: "Teaser Shopee x Duy Khánh T01",
     client: "Shopee",
     role: "Camera Operator",
     category: "social",
-    duration: "",
+    duration: "04:25",
     youtubeId: "BmTqH3iZWGM",
     orientation: "portrait",
   },
   {
-    id: "shopee-dinh-ngoc-diep-02",
-    title: "Đinh Ngọc Diệp 02",
+    id: "shopee-dinh-ngoc-diep-t06",
+    title: "Teaser Shopee x Đinh Ngọc Diệp T06",
     client: "Shopee",
     role: "Camera Operator",
     category: "social",
-    duration: "",
+    duration: "04:08",
     youtubeId: "kSRhcRSaw4U",
     orientation: "portrait",
   },
