@@ -29,15 +29,21 @@ export function VideoCard({ video, onOpen }: Props) {
     >
       <BlueprintCorners />
 
-      <div
-        className={`${styles.thumb} duotone reveal-on-hover ${thumbSrc ? "" : "stripe-fill"}`}
-      >
+      {/* The design system duotones every photograph. A cinematographer's reel
+          is the one place that cannot apply: the grade is the work being shown,
+          so thumbnails stay in true colour. */}
+      <div className={`${styles.thumb} ${thumbSrc ? "" : "stripe-fill"}`}>
         {thumbSrc ? (
+          /* The grid is auto-fit/minmax(280px): it adds columns rather than
+             widening them, so a card is ~300px on any desktop, not the half
+             viewport a fixed two-column layout would give. The stops below are
+             the widths where the column count actually changes — telling the
+             browser 50vw at 1280px made it fetch a 1920px file for a 297px box. */
           <Image
             src={thumbSrc}
             alt=""
             fill
-            sizes="(max-width: 480px) 100vw, (max-width: 1280px) 50vw, 400px"
+            sizes="(max-width: 625px) 100vw, (max-width: 919px) 50vw, (max-width: 1212px) 33vw, 300px"
             className={styles.thumbImage}
             onError={() =>
               setThumbSrc(

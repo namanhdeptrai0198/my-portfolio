@@ -4,20 +4,23 @@
 
 .dialog {
   width: min(920px, 100%);
-  /* The system's blueprint pass paints every .card and .dialog transparent,
-     which overrides the surface colour .dialog is given twelve lines earlier
-     in the same file. On a card that reads as a wireframe; on a modal it
-     leaves the title and the close button sitting unreadably on top of the
-     page behind. Nothing else about the frame changes. */
-  background: var(--color-surface);
 }
 
 /* A 9:16 piece in the wide dialog would sit between two black bars taller than
-   the frame itself. Narrow the dialog to whatever keeps the tall player fully
-   on screen — the 160px covers the backdrop padding, the dialog padding and
-   the title row above the frame. */
+   the frame itself. Narrow the dialog instead, to whatever keeps the whole
+   tall player on screen. The chrome above and below the frame is derived from
+   the tokens that draw it, so it follows the design system if those change:
+   backdrop padding twice, dialog padding twice, the gap under the title row,
+   and one line of the 20px heading. */
 .dialogPortrait {
-  width: min(420px, 100%, calc((100dvh - 160px) * 9 / 16));
+  --chrome: calc(4 * var(--space-4) + var(--space-3) + 30px);
+  width: min(420px, 100%, calc((100dvh - var(--chrome)) * 9 / 16));
+}
+
+/* .frame is always inside the dialog, so the orientation only has to be
+   decided once — on the parent. */
+.dialogPortrait .frame {
+  aspect-ratio: 9 / 16;
 }
 
 .head {
@@ -40,10 +43,6 @@
   position: relative;
   aspect-ratio: 16 / 9;
   background: var(--color-neutral-800);
-}
-
-.framePortrait {
-  aspect-ratio: 9 / 16;
 }
 
 .iframe {

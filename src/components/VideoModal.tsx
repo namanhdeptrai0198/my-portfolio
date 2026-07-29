@@ -109,9 +109,7 @@ export function VideoModal({ video, onClose }: Props) {
           </button>
         </div>
 
-        <div
-          className={`${styles.frame} ${isPortrait ? styles.framePortrait : ""}`}
-        >
+        <div className={styles.frame}>
           {video.youtubeId ? (
             <iframe
               src={embedUrl(video.youtubeId)}
