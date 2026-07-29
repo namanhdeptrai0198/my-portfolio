@@ -24,9 +24,12 @@ export function ProfileHeader() {
         )}
       </div>
 
-      <div className={styles.avatarRow}>
-        <div className={`${styles.avatar} duotone`}>
-          {profile.avatarImage ? (
+      {/* No headshot yet means no avatar at all — an empty block, or one
+          holding initials, is a placeholder standing where a face should be.
+          Set profile.avatarImage and the whole row comes back. */}
+      {profile.avatarImage ? (
+        <div className={styles.avatarRow}>
+          <div className={`${styles.avatar} duotone`}>
             <Image
               src={profile.avatarImage}
               alt={profile.name}
@@ -35,13 +38,9 @@ export function ProfileHeader() {
               sizes="96px"
               className={styles.avatarImage}
             />
-          ) : (
-            <span className={styles.initials} aria-hidden="true">
-              {profile.initials}
-            </span>
-          )}
+          </div>
         </div>
-      </div>
+      ) : null}
 
       <div className={styles.identity}>
         <h1 className={styles.name}>{profile.name}</h1>
