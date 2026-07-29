@@ -4,6 +4,12 @@
 
 .dialog {
   width: min(920px, 100%);
+  /* The system's blueprint pass paints every .card and .dialog transparent,
+     which overrides the surface colour .dialog is given twelve lines earlier
+     in the same file. On a card that reads as a wireframe; on a modal it
+     leaves the title and the close button sitting unreadably on top of the
+     page behind. Nothing else about the frame changes. */
+  background: var(--color-surface);
 }
 
 /* A 9:16 piece in the wide dialog would sit between two black bars taller than
