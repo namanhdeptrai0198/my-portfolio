@@ -41,8 +41,8 @@
 
 @media (max-width: 480px) {
   .grid {
-    /* 280px minimum plus the corner marks overflows a 375px screen once the
-       page padding is taken out — drop to a single column instead. */
+    /* Two 280px tracks cannot fit a 375px screen, and auto-fit would rather
+       overflow than drop below its minimum — pin it to one column instead. */
     grid-template-columns: 1fr;
   }
 }

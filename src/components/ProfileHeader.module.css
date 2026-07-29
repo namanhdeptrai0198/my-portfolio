@@ -24,6 +24,7 @@
   width: 96px;
   height: 96px;
   flex: none;
+  border-radius: var(--radius-md);
   background: var(--color-neutral-800);
   /* Above the cover it overlaps. */
   z-index: 2;

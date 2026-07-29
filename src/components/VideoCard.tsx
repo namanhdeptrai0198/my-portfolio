@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Play } from "lucide-react";
 import type { Video } from "@/lib/videos";
 import { fallbackThumbnailUrl, thumbnailUrl } from "@/lib/youtube";
-import { BlueprintCorners } from "./Blueprint";
 import styles from "./VideoCard.module.css";
 
 type Props = {
@@ -24,11 +23,9 @@ export function VideoCard({ video, onOpen }: Props) {
     <button
       type="button"
       onClick={() => onOpen(video)}
-      className={`card blueprint elev-sm ${styles.card}`}
+      className={`card elev-sm ${styles.card}`}
       aria-label={`Play ${video.title} — ${video.client}`}
     >
-      <BlueprintCorners />
-
       {/* The design system duotones every photograph. A cinematographer's reel
           is the one place that cannot apply: the grade is the work being shown,
           so thumbnails stay in true colour. */}

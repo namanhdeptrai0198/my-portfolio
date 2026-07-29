@@ -1,8 +1,4 @@
 .page {
   max-width: var(--page-max);
   margin-inline: auto;
-  /* The blueprint corner marks are drawn 6px outside their box. Without this
-     gutter the cover's marks fall past the viewport edge — clipped along the
-     top, and adding a horizontal scrollbar on phones. */
-  padding: 6px 6px 0;
 }

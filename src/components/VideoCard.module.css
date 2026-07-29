@@ -2,7 +2,9 @@
    the UA button defaults that .card does not cover. */
 .card {
   padding: 0;
-  overflow: visible;
+  /* The thumbnail runs to the card's edge, so it has to be clipped by the
+     card's own corner radius. */
+  overflow: hidden;
   text-align: left;
   font: inherit;
   color: inherit;
@@ -35,9 +37,8 @@
   align-items: center;
   justify-content: center;
   border: 1px solid var(--color-bg);
-  /* The one rounded thing on the page. The system's square corners are its
-     signature, but on a play affordance the disc is what reads as "press me",
-     and a hard square sat oddly over photographic frames. */
+  /* A full disc rather than the 4px the rest of the page uses — on a play
+     affordance the circle is what reads as "press me". */
   border-radius: 50%;
   background: color-mix(in srgb, var(--color-neutral-900) 30%, transparent);
   transition: background 240ms ease;
@@ -59,6 +60,7 @@
   bottom: 8px;
   z-index: 1;
   padding: 2px 6px;
+  border-radius: var(--radius-sm);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
   background: color-mix(in srgb, var(--color-neutral-900) 55%, transparent);

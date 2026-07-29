@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { profile } from "@/data/profile";
-import { BlueprintCorners } from "./Blueprint";
 import styles from "./ProfileHeader.module.css";
 
 /** Lucide at stroke-width 1.5 at interface size, per the design system. */
@@ -10,8 +9,7 @@ const ICON = { size: 15, strokeWidth: 1.5 } as const;
 export function ProfileHeader() {
   return (
     <header>
-      <div className={`${styles.cover} blueprint duotone ${profile.coverImage ? "" : "stripe-fill"}`}>
-        <BlueprintCorners />
+      <div className={`${styles.cover} duotone ${profile.coverImage ? "" : "stripe-fill"}`}>
         {profile.coverImage ? (
           <Image
             src={profile.coverImage}
@@ -27,8 +25,7 @@ export function ProfileHeader() {
       </div>
 
       <div className={styles.avatarRow}>
-        <div className={`${styles.avatar} blueprint duotone`}>
-          <BlueprintCorners />
+        <div className={`${styles.avatar} duotone`}>
           {profile.avatarImage ? (
             <Image
               src={profile.avatarImage}
