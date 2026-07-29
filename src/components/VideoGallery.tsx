@@ -3,12 +3,12 @@
 import { useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import {
-  filterByCategory,
-  type CategoryKey,
-  type CategoryOption,
+  filterByOrientation,
+  type FilterKey,
+  type FilterOption,
   type Video,
 } from "@/lib/videos";
-import { CategoryFilter } from "./CategoryFilter";
+import { ReelFilter } from "./ReelFilter";
 import { VideoCard } from "./VideoCard";
 import { VideoModal } from "./VideoModal";
 import styles from "./VideoGallery.module.css";
@@ -19,29 +19,29 @@ const LOAD_MORE_COUNT = 4;
 
 type Props = {
   videos: Video[];
-  categories: CategoryOption[];
+  filters: FilterOption[];
 };
 
 /**
- * The one interactive island on the page: category filter, "load more"
+ * The one interactive island on the page: aspect-ratio filter, "load more"
  * pagination and the video dialog. Everything above it stays a server
  * component.
  */
-export function VideoGallery({ videos, categories }: Props) {
-  const [activeCategory, setActiveCategory] = useState<CategoryKey | "all">("all");
+export function VideoGallery({ videos, filters }: Props) {
+  const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const matching = useMemo(
-    () => filterByCategory(videos, activeCategory),
-    [videos, activeCategory],
+    () => filterByOrientation(videos, activeFilter),
+    [videos, activeFilter],
   );
   const visible = matching.slice(0, visibleCount);
   const hasMore = matching.length > visibleCount;
   const selected = selectedId ? videos.find((v) => v.id === selectedId) ?? null : null;
 
-  function handleCategoryChange(key: CategoryKey | "all") {
-    setActiveCategory(key);
+  function handleFilterChange(key: FilterKey) {
+    setActiveFilter(key);
     // Changing filter starts the list over, as in the handoff spec.
     setVisibleCount(INITIAL_COUNT);
   }
@@ -53,10 +53,10 @@ export function VideoGallery({ videos, categories }: Props) {
           <h2 className={styles.heading}>
             {matching.length} {matching.length === 1 ? "Video" : "Videos"}
           </h2>
-          <CategoryFilter
-            categories={categories}
-            active={activeCategory}
-            onChange={handleCategoryChange}
+          <ReelFilter
+            options={filters}
+            active={activeFilter}
+            onChange={handleFilterChange}
           />
         </div>
 

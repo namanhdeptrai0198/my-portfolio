@@ -30,7 +30,6 @@ Mỗi dự án là một khối như sau — copy khối cũ, dán xuống dư�
   title: "Shopee x Gil Lê",     // tên hiện trên thẻ
   client: "Shopee",             // khách hàng
   role: "Camera Operator",      // vai trò của bạn trong dự án
-  category: "commercial",       // xem danh sách bên dưới
   duration: "01:20",            // phút:giây — để "" nếu không muốn hiện
   youtubeId: "aqz-KE-bpKQ",     // xem cách lấy bên dưới
   orientation: "portrait",      // CHỈ thêm dòng này nếu video quay dọc
@@ -52,14 +51,16 @@ https://youtube.com/shorts/aqz-KE-bpKQ
 
 Chỉ dán 11 ký tự đó, **không dán cả link**.
 
-**`orientation`:** video quay dọc (9:16) thì thêm `orientation: "portrait"`,
-popup sẽ mở khung đứng thay vì kẹp video giữa hai dải đen. Video ngang bình
-thường thì **bỏ hẳn dòng này**. Lưu ý: dọc hay ngang không liên quan tới việc
-link là `/shorts/` hay `youtu.be` — nhiều video dọc vẫn đăng dạng thường.
+**`orientation` — dòng quan trọng nhất.** Video quay dọc thì thêm
+`orientation: "portrait"`; video ngang bình thường thì **bỏ hẳn dòng này**.
+Nó quyết định hai thứ: popup mở khung đứng thay vì kẹp video giữa hai dải đen,
+và video nằm ở nhóm nào trong bộ lọc **16:9 / 9:16**.
 
-**`category` chọn một trong:** `commercial` · `social` · `mv` · `short` · `doc`
-(Đổi tên hiển thị của các nhóm ở đầu file, mục `CATEGORY_LABELS`.
-Nhóm nào chưa có video nào thì tự động không hiện trong bộ lọc.)
+Lưu ý: dọc hay ngang **không** suy ra được từ link. Nhiều video dọc của bạn vẫn
+đăng dạng thường (`youtu.be`) chứ không phải `/shorts/` — phải nhìn vào footage.
+
+Nhóm nào chưa có video nào thì tự động không hiện trong bộ lọc, nên nếu cả reel
+đều quay dọc thì nút "16:9" tự biến mất.
 
 Ảnh thumbnail **không cần làm** — hệ thống tự lấy từ YouTube theo id.
 

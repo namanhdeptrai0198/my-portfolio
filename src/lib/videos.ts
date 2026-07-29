@@ -1,11 +1,23 @@
-import { CATEGORY_LABELS, videos, type CategoryKey, type Video } from "@/data/videos";
+import { videos, type Orientation, type Video } from "@/data/videos";
 
-export type { CategoryKey, Video };
+export type { Orientation, Video };
 
-export type CategoryOption = {
-  key: CategoryKey | "all";
+export type FilterKey = Orientation | "all";
+
+export type FilterOption = {
+  key: FilterKey;
   label: string;
   count: number;
+};
+
+/** Omitting `orientation` means ordinary 16:9 work. */
+export function orientationOf(video: Video): Orientation {
+  return video.orientation ?? "landscape";
+}
+
+const ORIENTATION_LABELS: Record<Orientation, string> = {
+  landscape: "16:9",
+  portrait: "9:16",
 };
 
 /**
@@ -13,31 +25,31 @@ export type CategoryOption = {
  *
  * Components import from here, never from `@/data/videos` directly — so
  * swapping the static array for a CMS or an API later is a change to this file
- * alone. Both functions are sync today; if the source becomes remote, make them
- * async and await them in the server component that calls them.
+ * alone. All three functions are sync today; if the source becomes remote, make
+ * them async and await them in the server component that calls them.
  */
 export function getVideos(): Video[] {
   return videos;
 }
 
 /**
- * "All" plus one entry per category that actually has work in it, in the fixed
- * order declared by CATEGORY_LABELS — so the filter never shows an empty tab
- * and never reorders itself as the reel grows.
+ * "All" plus one entry per shape that actually has work in it, always widest
+ * first — so the filter never shows an empty tab and never reorders itself as
+ * the reel grows.
  */
-export function getCategories(): CategoryOption[] {
+export function getFilters(): FilterOption[] {
   const all = getVideos();
-  const used = (Object.keys(CATEGORY_LABELS) as CategoryKey[])
+  const used = (Object.keys(ORIENTATION_LABELS) as Orientation[])
     .map((key) => ({
       key,
-      label: CATEGORY_LABELS[key],
-      count: all.filter((v) => v.category === key).length,
+      label: ORIENTATION_LABELS[key],
+      count: all.filter((v) => orientationOf(v) === key).length,
     }))
     .filter((option) => option.count > 0);
 
   return [{ key: "all" as const, label: "All", count: all.length }, ...used];
 }
 
-export function filterByCategory(all: Video[], category: CategoryKey | "all"): Video[] {
-  return category === "all" ? all : all.filter((v) => v.category === category);
+export function filterByOrientation(all: Video[], key: FilterKey): Video[] {
+  return key === "all" ? all : all.filter((v) => orientationOf(v) === key);
 }

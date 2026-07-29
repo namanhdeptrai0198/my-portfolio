@@ -1,12 +1,5 @@
-export const CATEGORY_LABELS = {
-  commercial: "Commercial",
-  social: "Social",
-  mv: "Music Video",
-  short: "Short Film",
-  doc: "Documentary",
-} as const;
-
-export type CategoryKey = keyof typeof CATEGORY_LABELS;
+/** The shape the piece was shot in — also what the reel filter sorts on. */
+export type Orientation = "landscape" | "portrait";
 
 export type Video = {
   /** Stable slug — used as the React key and the modal lookup. */
@@ -16,7 +9,6 @@ export type Video = {
   client: string;
   /** What Nam Anh did on it. */
   role: string;
-  category: CategoryKey;
   /** mm:ss — shown as a badge on the thumbnail. */
   duration: string;
   /**
@@ -28,12 +20,13 @@ export type Video = {
    */
   youtubeId: string;
   /**
-   * Shape of the footage. Omit for normal 16:9 work; set "portrait" for
-   * vertical pieces so the player opens tall instead of stranding the frame
-   * between two black bars. Not always the same as whether YouTube calls it a
-   * Short — several of these are vertical but published as normal videos.
+   * Omit for normal 16:9 work; set "portrait" for vertical pieces. This drives
+   * two things: the player opens tall instead of stranding the frame between
+   * two black bars, and the reel's 16:9 / 9:16 filter. Not the same as whether
+   * YouTube calls it a Short — several of these are vertical but published as
+   * normal videos, so check the footage rather than the URL.
    */
-  orientation?: "landscape" | "portrait";
+  orientation?: Orientation;
   year?: number;
 };
 
@@ -46,7 +39,6 @@ export const videos: Video[] = [
     title: "Another Saigon by LG Video",
     client: "LG",
     role: "Camera Operator, VFX Animation",
-    category: "commercial",
     duration: "02:04",
     youtubeId: "68jBERI3RSo",
   },
@@ -55,7 +47,6 @@ export const videos: Video[] = [
     title: "Geely x ChiPu",
     client: "Geely",
     role: "Camera Operator",
-    category: "commercial",
     duration: "00:36",
     youtubeId: "QlVltJShCTA",
   },
@@ -64,7 +55,6 @@ export const videos: Video[] = [
     title: "Pharmaton Tet X Song Luân",
     client: "Pharmaton",
     role: "Editor",
-    category: "commercial",
     duration: "01:54",
     youtubeId: "N3Uk2fkM3wk",
     orientation: "portrait",
@@ -74,7 +64,6 @@ export const videos: Video[] = [
     title: "Teaser Shopee x Đinh Ngọc Diệp T04",
     client: "Shopee",
     role: "Camera Operator",
-    category: "social",
     duration: "01:25",
     youtubeId: "fMGBr0NjLfk",
     orientation: "portrait",
@@ -84,7 +73,6 @@ export const videos: Video[] = [
     title: "1664 Blanc x WOKEUP",
     client: "1664 Blanc",
     role: "Camera Operator, Editor",
-    category: "commercial",
     duration: "00:30",
     youtubeId: "kH3kZYyvYjE",
     orientation: "portrait",
@@ -94,7 +82,6 @@ export const videos: Video[] = [
     title: "Somersby escape tour 2025 - Quốc Anh",
     client: "Somersby",
     role: "Camera Operator, Editor",
-    category: "commercial",
     duration: "00:55",
     youtubeId: "ldJAIithDZ4",
     orientation: "portrait",
@@ -104,7 +91,6 @@ export const videos: Video[] = [
     title: "Dove Deo Summer 01",
     client: "Dove",
     role: "Camera Operator",
-    category: "commercial",
     duration: "00:21",
     youtubeId: "Fj8aHfhE1Js",
     orientation: "portrait",
@@ -114,7 +100,6 @@ export const videos: Video[] = [
     title: "Dove Deo Summer 02",
     client: "Dove",
     role: "Camera Operator",
-    category: "commercial",
     duration: "00:24",
     youtubeId: "QD-a6wYXqD0",
     orientation: "portrait",
@@ -124,7 +109,6 @@ export const videos: Video[] = [
     title: "CLOSEUP HAILEE",
     client: "Closeup",
     role: "Editor",
-    category: "commercial",
     duration: "00:20",
     youtubeId: "OILTsQDTmlU",
     orientation: "portrait",
@@ -134,7 +118,6 @@ export const videos: Video[] = [
     title: "Panasonic AC HEATPUMP",
     client: "Panasonic",
     role: "Editor",
-    category: "commercial",
     duration: "00:34",
     youtubeId: "0O2LKaLvzas",
     orientation: "portrait",
@@ -144,7 +127,6 @@ export const videos: Video[] = [
     title: "TikTokShop Voucher Extra Aug 2025",
     client: "TikTok Shop",
     role: "Camera Operator",
-    category: "social",
     duration: "00:37",
     youtubeId: "PakRqj7aGYA",
     orientation: "portrait",
@@ -154,7 +136,6 @@ export const videos: Video[] = [
     title: "[BUMPER] Tiktok Shop 10.10",
     client: "TikTok Shop",
     role: "Editor",
-    category: "social",
     duration: "00:26",
     youtubeId: "96PIdl2_JiQ",
     orientation: "portrait",
@@ -164,7 +145,6 @@ export const videos: Video[] = [
     title: "Teaser Shopee x Duy Khánh T01",
     client: "Shopee",
     role: "Camera Operator",
-    category: "social",
     duration: "04:25",
     youtubeId: "BmTqH3iZWGM",
     orientation: "portrait",
@@ -174,7 +154,6 @@ export const videos: Video[] = [
     title: "Teaser Shopee x Đinh Ngọc Diệp T06",
     client: "Shopee",
     role: "Camera Operator",
-    category: "social",
     duration: "04:08",
     youtubeId: "kSRhcRSaw4U",
     orientation: "portrait",
