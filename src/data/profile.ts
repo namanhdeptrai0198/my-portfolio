@@ -24,7 +24,7 @@ export type Profile = {
 export const profile: Profile = {
   name: "Nguyễn Ngọc Nam Anh",
   initials: "NA",
-  role: "Camera Operator — Assistant Director — Editor",
+  role: "Camera Operator - Editor",
   location: "Based in Vietnam",
   email: "anh0198hcm@gmail.com",
   phoneHref: "+84938588157",
@@ -33,7 +33,7 @@ export const profile: Profile = {
   /** Shown in the browser tab and when the link is pasted into a chat app. */
   siteTitle: "Nguyễn Ngọc Nam Anh — Camera Operator",
   siteDescription:
-    "Selected work from a Vietnam-based camera operator, assistant director and editor. Commercials, social campaigns and music videos for 1664 Blanc, Dove, Shopee, TikTok Shop, Lazada, OMO and more.",
+    "Selected work from a Vietnam-based camera operator and editor. Commercials and social campaigns for LG, Geely, Pharmaton, Shopee, 1664 Blanc, Dove, Closeup, Somersby, Panasonic and TikTok Shop.",
 
   /**
    * TO FILL IN: drop the files into public/images/ and point these at them,
