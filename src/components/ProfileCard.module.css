@@ -1,0 +1,85 @@
+.card {
+  padding: var(--space-4) var(--page-pad) 0;
+}
+
+.avatar {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-800);
+}
+
+.avatarImage {
+  object-fit: cover;
+}
+
+.name {
+  margin: 0 0 4px;
+}
+
+.role {
+  margin: 0 0 var(--space-3);
+  font-size: 14px;
+  font-weight: 600;
+  /* Body-size text in the accent must use a deep ramp step for contrast —
+     the base accent only clears 3:1. */
+  color: var(--color-accent-700);
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.contactRow svg {
+  flex: none;
+}
+
+.contactRow a {
+  color: var(--color-accent-700);
+}
+
+.contactRow a:hover {
+  text-decoration: underline;
+}
+
+.location {
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
+}
+
+.lastRow {
+  margin-bottom: var(--space-4);
+}
+
+.rule {
+  margin: var(--space-8) 0 var(--space-4);
+}
+
+/* Two-column layout: this becomes the fixed left column. `align-self: start`
+   is what makes the sticky work — it keeps the box at its content height so it
+   has room to travel down the full-height grid area behind it. */
+@media (min-width: 900px) {
+  .card {
+    position: sticky;
+    top: var(--space-6);
+    align-self: start;
+    padding: var(--space-6) 0 0;
+  }
+
+  /* The reel sits beside this block now, not below it. */
+  .rule {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .name {
+    font-size: 34px;
+  }
+}
