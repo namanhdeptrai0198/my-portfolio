@@ -7,9 +7,13 @@
  * Below 900px everything stacks and reads top to bottom, exactly as before.
  *
  * Above it the identity block becomes a fixed left column that the reel scrolls
- * past. The horizontal padding moves up here so the two columns share one
- * gutter; `--page-pad: 0` switches it off inside the children, which all take
- * their own padding from that token.
+ * past. Every rule that switch depends on lives in this block — including the
+ * ones that act on ProfileCard — so the breakpoint is written once and the two
+ * halves of the layout cannot drift apart.
+ *
+ * The horizontal gutter moves up to `.body` so both columns share one; setting
+ * `--page-pad: 0` is how the children are told to stop adding their own, since
+ * every one of them takes its inline padding from that token.
  */
 @media (min-width: 900px) {
   .body {
@@ -19,6 +23,22 @@
     grid-template-columns: 300px minmax(0, 1fr);
     gap: var(--space-6);
     padding-inline: var(--space-6);
+  }
+
+  /* ProfileCard's root element. `align-self: start` is load-bearing: it keeps
+     the box at its content height so it has room to travel down the full-height
+     grid area behind it. Stretched, it would have nowhere to stick to. */
+  .body > header {
+    position: sticky;
+    top: var(--space-6);
+    align-self: start;
+    padding-top: var(--space-6);
+  }
+
+  /* The rule under the identity block only separates it from the reel when the
+     reel is below it. Side by side, the gap does that job. */
+  .body > header :global(.hr) {
+    display: none;
   }
 
   /* The reel column has to be allowed to be shorter than the viewport without

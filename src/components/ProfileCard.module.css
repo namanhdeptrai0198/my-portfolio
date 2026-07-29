@@ -61,22 +61,8 @@
   margin: var(--space-8) 0 var(--space-4);
 }
 
-/* Two-column layout: this becomes the fixed left column. `align-self: start`
-   is what makes the sticky work — it keeps the box at its content height so it
-   has room to travel down the full-height grid area behind it. */
-@media (min-width: 900px) {
-  .card {
-    position: sticky;
-    top: var(--space-6);
-    align-self: start;
-    padding: var(--space-6) 0 0;
-  }
-
-  /* The reel sits beside this block now, not below it. */
-  .rule {
-    display: none;
-  }
-}
+/* Everything that changes when this becomes the sticky left column lives in
+   app/page.module.css, with the rest of that layout switch. */
 
 @media (max-width: 480px) {
   .name {

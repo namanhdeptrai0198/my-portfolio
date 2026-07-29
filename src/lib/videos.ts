@@ -7,7 +7,6 @@ export type FilterKey = Orientation | "all";
 export type FilterOption = {
   key: FilterKey;
   label: string;
-  count: number;
 };
 
 /** Omitting `orientation` means ordinary 16:9 work. */
@@ -40,14 +39,10 @@ export function getVideos(): Video[] {
 export function getFilters(): FilterOption[] {
   const all = getVideos();
   const used = (Object.keys(ORIENTATION_LABELS) as Orientation[])
-    .map((key) => ({
-      key,
-      label: ORIENTATION_LABELS[key],
-      count: all.filter((v) => orientationOf(v) === key).length,
-    }))
-    .filter((option) => option.count > 0);
+    .filter((key) => all.some((v) => orientationOf(v) === key))
+    .map((key) => ({ key, label: ORIENTATION_LABELS[key] }));
 
-  return [{ key: "all" as const, label: "All", count: all.length }, ...used];
+  return [{ key: "all" as const, label: "All" }, ...used];
 }
 
 export function filterByOrientation(all: Video[], key: FilterKey): Video[] {

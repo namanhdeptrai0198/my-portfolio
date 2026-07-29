@@ -39,16 +39,18 @@ export function VideoCard({ video, onOpen }: Props) {
           so thumbnails stay in true colour. */}
       <div className={`${styles.thumb} ${thumbSrc ? "" : "stripe-fill"}`}>
         {thumbSrc ? (
-          /* The grid is auto-fit/minmax(280px): it adds columns rather than
-             widening them, so a card is ~300px on any desktop, not the half
-             viewport a fixed two-column layout would give. The stops below are
-             the widths where the column count actually changes — telling the
-             browser 50vw at 1280px made it fetch a 1920px file for a 297px box. */
+          /* These stops mirror layout maths kept in two other files — the
+             auto-fit/minmax(280px) grid in VideoGallery.module.css, and the
+             300px sticky column that page.module.css inserts beside the reel
+             above 900px. A card is never the fraction of the viewport a plain
+             two-column layout would suggest: the grid adds columns instead of
+             widening them, and above 900px the reel starts 361px in. Change
+             either file and these have to move with it. */
           <Image
             src={thumbSrc}
             alt=""
             fill
-            sizes="(max-width: 625px) 100vw, (max-width: 919px) 50vw, (max-width: 1212px) 33vw, 300px"
+            sizes="(max-width: 614px) 100vw, (max-width: 899px) 48vw, (max-width: 934px) 62vw, (max-width: 1228px) 36vw, 300px"
             className={styles.thumbImage}
             onError={() =>
               setThumbStage((stage) => (stage === "max" ? "fallback" : "none"))

@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef } from "react";
 import { X } from "lucide-react";
-import type { Video } from "@/lib/videos";
+import { orientationOf, type Video } from "@/lib/videos";
 import { embedUrl } from "@/lib/youtube";
 import styles from "./VideoModal.module.css";
 
@@ -27,7 +27,7 @@ export function VideoModal({ video, onClose }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const titleId = useId();
-  const isPortrait = video.orientation === "portrait";
+  const isPortrait = orientationOf(video) === "portrait";
 
   // Move focus in on open, and put it back on the opening card on close.
   useEffect(() => {

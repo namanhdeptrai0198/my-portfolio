@@ -1,8 +1,10 @@
-/* The design system first, then this project's own additions — the gaps the
-   handoff left open (page width, small screens, motion) and the one place the
-   system contradicts itself. Corrections live here rather than in a component
-   module so a second dialog inherits them, and so they win on source order
-   instead of on CSS-module injection order. */
+/* The design system first, then this project's own additions:
+     - gaps the handoff left open (page width, small screens, motion);
+     - the two corrections below, both undoing part of the same "blueprint
+       frame" pass in industry.css, whose registration marks this build drops.
+   Corrections live here rather than in a component module so anything added
+   later inherits them, and so they win on source order rather than on
+   CSS-module injection order. */
 @import "../styles/industry.css";
 
 /* The handoff's "blueprint frame" pass (industry.css line 285) squares off

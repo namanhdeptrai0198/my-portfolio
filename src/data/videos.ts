@@ -27,7 +27,6 @@ export type Video = {
    * normal videos, so check the footage rather than the URL.
    */
   orientation?: Orientation;
-  year?: number;
 };
 
 /**
