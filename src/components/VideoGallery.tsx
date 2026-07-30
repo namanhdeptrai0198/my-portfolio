@@ -8,9 +8,9 @@ import {
   type FilterOption,
   type Video,
 } from "@/lib/videos";
+import { useSelectVideo } from "./PlaybackProvider";
 import { ReelFilter } from "./ReelFilter";
 import { VideoCard } from "./VideoCard";
-import { VideoModal } from "./VideoModal";
 import styles from "./VideoGallery.module.css";
 
 /** Enough to fill the first screen; every "Load more" adds a shorter run. */
@@ -23,14 +23,15 @@ type Props = {
 };
 
 /**
- * The one interactive island on the page: aspect-ratio filter, "load more"
- * pagination and the video dialog. Everything above it stays a server
- * component.
+ * The reel: aspect-ratio filter and "load more" pagination. What a click on a
+ * card does is not decided here — PlaybackProvider owns that, because above
+ * 900px the answer is "play it in the spotlight at the top of the page" and
+ * below it "open the dialog".
  */
 export function VideoGallery({ videos, filters }: Props) {
+  const select = useSelectVideo();
   const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const matching = useMemo(
     () => filterByOrientation(videos, activeFilter),
@@ -38,7 +39,6 @@ export function VideoGallery({ videos, filters }: Props) {
   );
   const visible = matching.slice(0, visibleCount);
   const hasMore = matching.length > visibleCount;
-  const selected = selectedId ? videos.find((v) => v.id === selectedId) ?? null : null;
 
   function handleFilterChange(key: FilterKey) {
     setActiveFilter(key);
@@ -63,11 +63,7 @@ export function VideoGallery({ videos, filters }: Props) {
         {visible.length > 0 ? (
           <div className={styles.grid}>
             {visible.map((video) => (
-              <VideoCard
-                key={video.id}
-                video={video}
-                onOpen={(v) => setSelectedId(v.id)}
-              />
+              <VideoCard key={video.id} video={video} onOpen={select} />
             ))}
           </div>
         ) : (
@@ -86,10 +82,6 @@ export function VideoGallery({ videos, filters }: Props) {
             <ChevronDown size={15} strokeWidth={1.5} aria-hidden="true" />
           </button>
         </div>
-      ) : null}
-
-      {selected ? (
-        <VideoModal video={selected} onClose={() => setSelectedId(null)} />
       ) : null}
     </>
   );

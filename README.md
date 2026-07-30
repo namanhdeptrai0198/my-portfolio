@@ -87,10 +87,14 @@ sips -Z 2400 -s formatOptions 82 ~/duong-dan/anh-goc.jpg --out public/images/cov
    phần trên của ảnh. Vì ảnh dùng chung cho cả hai kiểu cắt (ngang và vuông),
    kiểm tra lại cả hai cỡ màn hình sau khi đổi số.
 
-**Video spotlight** (dải lớn phía trên cùng, chỉ hiện từ 900px trở lên): mở
+**Video spotlight** (khung lớn phía trên cùng, chỉ hiện từ 900px trở lên): mở
 `src/data/videos.ts`, sửa `spotlightId` thành `id` của video muốn đưa lên đầu.
 Video đó vẫn nằm nguyên trong reel bên dưới — spotlight chỉ là một cách hiển
 thị thêm, không phải cắt nó ra khỏi danh sách.
+
+`spotlightId` chỉ quyết định video **mở màn**. Từ 900px trở lên, khách bấm thẻ
+nào trong reel thì video đó lên spotlight và chạy ngay tại đó, không mở popup —
+nên bạn không cần sửa gì để họ xem được cái khác.
 
 **Ảnh chân dung**: chép ảnh vuông (~400×400) vào `public/images/`, rồi mở
 `src/data/profile.ts` sửa `avatarImage: "/images/avatar.jpg"`. Khi còn `null`
@@ -154,6 +158,12 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
 - Popup video đóng được bằng Esc, bằng nút X và bằng bấm ra nền; khoá cuộn
   trang phía sau và trả con trỏ bàn phím về đúng thẻ video đã bấm.
 - Từ 900px trở lên, cột trái (ảnh bìa + thông tin liên hệ) dính lại khi cuộn
-  trang, và một video "spotlight" hiện full-bề-ngang phía trên — bấm vào mở
-  đúng popup như thẻ video thường. Dưới 900px cả hai điều này tắt hẳn: ảnh bìa
-  quay lại full-bleed, spotlight không render, layout y hệt bản gốc.
+  trang, và video chạy ngay trên "spotlight" phía trên thay vì mở popup —
+  bấm thẻ nào thì trang tự cuộn lên đó. Khung player lấy đúng tỉ lệ của video
+  (16:9 hay 9:16) và cao tối đa 70% màn hình, nên không bao giờ có viền đen.
+  Dưới 900px cả hai điều này tắt hẳn: ảnh bìa quay lại full-bleed, spotlight
+  không render, bấm thẻ vẫn mở popup — layout y hệt bản gốc.
+- Dòng "Camera Operator - Editor" và lá cờ Việt Nam dàn hai đầu một hàng. Trong
+  cột trái hẹp (300px) chỉ còn lá cờ: hai đoạn chữ cộng lại cần 291px mà cột chỉ
+  có 277px. Lá cờ được vẽ bằng SVG chứ không dùng emoji 🇻🇳 — Chrome trên
+  Windows vẽ emoji đó thành hai chữ "VN".

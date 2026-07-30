@@ -1,4 +1,5 @@
 import { CoverBanner } from "@/components/CoverBanner";
+import { PlaybackProvider } from "@/components/PlaybackProvider";
 import { ProfileCard } from "@/components/ProfileCard";
 import { Spotlight } from "@/components/Spotlight";
 import { VideoGallery } from "@/components/VideoGallery";
@@ -12,16 +13,20 @@ export default function Page() {
 
   return (
     <main className={styles.page}>
-      {spotlight ? <Spotlight video={spotlight} /> : null}
-      <div className={styles.body}>
-        <div className={styles.identity}>
-          <CoverBanner />
-          <ProfileCard />
+      {/* Only the spotlight and the reel read this context; CoverBanner and
+          ProfileCard pass through it as children and stay server components. */}
+      <PlaybackProvider initial={spotlight}>
+        <Spotlight />
+        <div className={styles.body}>
+          <div className={styles.identity}>
+            <CoverBanner />
+            <ProfileCard />
+          </div>
+          <div className={styles.reel}>
+            <VideoGallery videos={videos} filters={filters} />
+          </div>
         </div>
-        <div className={styles.reel}>
-          <VideoGallery videos={videos} filters={filters} />
-        </div>
-      </div>
+      </PlaybackProvider>
     </main>
   );
 }

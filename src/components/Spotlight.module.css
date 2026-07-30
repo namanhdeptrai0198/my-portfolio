@@ -2,26 +2,39 @@
    at 900px, so this mirrors that threshold exactly. Below it the identity
    block already carries the cover photo (see CoverBanner + page.module.css),
    so this would be a second, redundant hero. */
-.button {
+.section {
   display: none;
 }
 
 @media (min-width: 900px) {
-  .button {
+  .section {
     display: block;
-    /* Inset by the same gutter `.body` uses, so this strip's edges line up with
-       the two columns under it. The width has to be spelled out: a <button>
-       shrink-wraps to its content even at `display: block`, and the frame
-       inside has no intrinsic width to wrap to — `auto` collapses it to 2px. */
-    width: calc(100% - var(--space-6) * 2);
+    /* Inset by the same gutter `.body` uses, so this strip's edges line up
+       with the two columns under it. */
     margin: var(--space-6) var(--space-6) 0;
-    padding: 0;
-    overflow: hidden;
-    text-align: left;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
+    /* PlaybackProvider scrolls this to the top of the viewport when a card is
+       picked; without this the margin above would be scrolled off with it. */
+    scroll-margin-top: var(--space-6);
   }
+}
+
+/* This only ever receives focus programmatically — it is `tabindex="-1"`, so
+   Tab never lands here — and the arriving video is its own announcement. A
+   ring around the whole strip would just be a box drawn around the page. */
+.section:focus {
+  outline: none;
+}
+
+/* Resets a <button> back to a plain block — the still fills it edge to edge. */
+.button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 .frame {
@@ -51,6 +64,47 @@
   justify-content: center;
 }
 
+/*
+ * Playing.
+ *
+ * The still is a 380px band because it is a crop; a player is not, and cropping
+ * one only means black bars. So the frame takes the video's own shape and the
+ * height is capped instead — width is derived from that cap so the box is never
+ * wider than the aspect ratio can fill. On an 800px-tall laptop that lands a
+ * 16:9 piece at 995×560 and a 9:16 one at 315×560, both whole on the screen.
+ *
+ * `.stage` carries the same width so the caption stays under the player rather
+ * than stranded at the left edge when a portrait video narrows it.
+ */
+.stage {
+  /* `dvh`, as in VideoModal's portrait dialog — a `vh` cap is measured against
+     the tallest the viewport ever gets, so a browser with retracting chrome
+     would let the player run off the bottom. */
+  --player-max-h: 70dvh;
+
+  width: min(100%, calc(var(--player-max-h) * 16 / 9));
+  margin-inline: auto;
+}
+
+.stagePortrait {
+  width: min(100%, calc(var(--player-max-h) * 9 / 16));
+}
+
+.player {
+  aspect-ratio: 16 / 9;
+  /* The hairline and radius every card on the page carries, applied here
+     rather than borrowed from `.card`, whose padding and flex column the
+     frame would only have to undo. */
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-neutral-800);
+}
+
+.playerPortrait {
+  aspect-ratio: 9 / 16;
+}
+
 .caption {
   position: absolute;
   left: 0;
@@ -58,6 +112,10 @@
   bottom: 0;
   padding: var(--space-4) var(--space-6);
   color: var(--color-bg);
+}
+
+.captionBelow {
+  padding-top: var(--space-3);
 }
 
 .title {
@@ -71,5 +129,14 @@
   gap: 6px;
   margin-top: 4px;
   font-size: 13px;
+}
+
+/* Over the photograph the whole caption is white and the meta line steps back
+   with opacity; on the page it steps back with colour instead. */
+.caption .meta {
   opacity: 0.85;
+}
+
+.captionBelow .meta {
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
 }

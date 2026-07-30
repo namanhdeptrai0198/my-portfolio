@@ -29,8 +29,9 @@ export type Video = {
   orientation?: Orientation;
 };
 
-/** The video shown in the desktop spotlight above the reel. Change the id to
- *  put a different piece there — it stays in the reel below either way. */
+/** What the desktop spotlight holds before the visitor picks anything — from
+ *  then on it holds whatever they clicked in the reel. Change the id to change
+ *  that opening piece; it stays in the reel below either way. */
 export const spotlightId = "geely-x-chi-pu";
 
 /**
@@ -159,6 +160,15 @@ export const videos: Video[] = [
     role: "Camera Operator",
     duration: "04:08",
     youtubeId: "kSRhcRSaw4U",
+    orientation: "portrait",
+  },
+  {
+    id: "surf-social-funtional-asset",
+    title: "Surf Social Funtional Asset",
+    client: "Surf",
+    role: "Editor",
+    duration: "00:19",
+    youtubeId: "TiWGT0cG32I",
     orientation: "portrait",
   },
 ];

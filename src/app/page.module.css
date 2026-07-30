@@ -61,6 +61,18 @@
     font-size: 34px;
   }
 
+  /* The role and the location share one line, and in this column they cannot
+     both keep their words: "Camera Operator - Editor" measures 155.1px,
+     "Based in Vietnam" another 105px, and with the flag and the gap between
+     them that comes to 291.3px against 277.6px of text width. Drop the words
+     and keep the flag — it says the same thing, and it is what the row is
+     pointing at anyway. Nothing is lost to a screen reader: the flag carries
+     "Based in Vietnam" as its accessible name at every width (see
+     VietnamFlag), which is why this can be a plain `display: none`. */
+  .identity [data-location] {
+    display: none;
+  }
+
   /* CoverBanner is always the first child — square it off into a portrait
      rather than the wide crop it uses full-bleed below 900px. */
   .identity > :first-child {

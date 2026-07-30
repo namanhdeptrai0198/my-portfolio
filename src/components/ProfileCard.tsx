@@ -1,6 +1,7 @@
 import Image from "next/image";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { profile } from "@/data/profile";
+import { VietnamFlag } from "./VietnamFlag";
 import styles from "./ProfileCard.module.css";
 
 /** Lucide at stroke-width 1.5 at interface size, per the design system. */
@@ -32,12 +33,20 @@ export function ProfileCard() {
       ) : null}
 
       <h1 className={styles.name}>{profile.name}</h1>
-      <p className={styles.role}>{profile.role}</p>
 
-      <p className={`${styles.contactRow} ${styles.location}`}>
-        <MapPin {...ICON} aria-hidden="true" />
-        <span>{profile.location}</span>
-      </p>
+      {/* What he does and where he is are the two facts a client checks first,
+          so they share a line and sit at opposite ends of it. */}
+      <div className={styles.roleRow}>
+        <p className={styles.role}>{profile.role}</p>
+        <p className={`${styles.contactRow} ${styles.location}`}>
+          <VietnamFlag size={ICON.size} label={profile.location} />
+          {/* The flag already carries this as its accessible name — see
+              VietnamFlag — so the text here is decoration for the eye only. */}
+          <span data-location aria-hidden="true">
+            {profile.location}
+          </span>
+        </p>
+      </div>
 
       <p className={styles.contactRow}>
         <Mail {...ICON} aria-hidden="true" />

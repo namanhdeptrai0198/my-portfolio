@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef } from "react";
 import { X } from "lucide-react";
 import { orientationOf, type Video } from "@/lib/videos";
-import { embedUrl } from "@/lib/youtube";
+import { VideoEmbed } from "./VideoEmbed";
 import styles from "./VideoModal.module.css";
 
 const FOCUSABLE =
@@ -111,13 +111,7 @@ export function VideoModal({ video, onClose }: Props) {
 
         <div className={styles.frame}>
           {video.youtubeId ? (
-            <iframe
-              src={embedUrl(video.youtubeId)}
-              title={`${video.title} — ${video.client}`}
-              className={styles.iframe}
-              allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-              allowFullScreen
-            />
+            <VideoEmbed video={video} />
           ) : (
             <p className={styles.placeholder}>
               [ paste the YouTube id for &ldquo;{video.title}&rdquo; into
