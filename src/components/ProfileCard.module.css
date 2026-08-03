@@ -19,18 +19,8 @@
   margin: 0 0 4px;
 }
 
-/* Role on the left, location on the right. The children keep their own
-   margins at 0 — the row owns the space under the pair. */
-.roleRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
-}
-
 .role {
-  margin: 0;
+  margin: 0 0 var(--space-3);
   font-size: 14px;
   font-weight: 600;
   /* Body-size text in the accent must use a deep ramp step for contrast —
@@ -58,14 +48,17 @@
   text-decoration: underline;
 }
 
-.location {
-  flex: none;
-  margin: 0;
-  color: var(--color-text);
-}
-
 .lastRow {
   margin-bottom: var(--space-4);
+}
+
+/* The flag, which is always this row's last child: pushed to the far end so the
+   line reads phone-number-then-country across the card's full width.
+   `margin-left: auto` rather than `justify-content: space-between` on the row —
+   that spreads every child, and it would have prised the phone icon away from
+   the number it belongs to. */
+.lastRow > :last-child {
+  margin-left: auto;
 }
 
 .rule {

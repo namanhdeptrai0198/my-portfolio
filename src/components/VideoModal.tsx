@@ -95,8 +95,14 @@ export function VideoModal({ video, onClose }: Props) {
         aria-labelledby={titleId}
       >
         <div className={styles.head}>
-          <div id={titleId} className={`dialog-title ${styles.title}`}>
-            {video.title}
+          <div className={styles.heading}>
+            <div id={titleId} className={`dialog-title ${styles.title}`}>
+              {video.title}
+            </div>
+            {/* What he did on it, in the same muted `card-meta` the card that
+                opened this dialog uses for the line — the dialog should not be
+                the one place on the page where the credit is missing. */}
+            <div className={`card-meta ${styles.role}`}>{video.role}</div>
           </div>
           <button
             ref={closeRef}

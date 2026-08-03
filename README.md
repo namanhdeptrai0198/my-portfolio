@@ -96,6 +96,10 @@ thị thêm, không phải cắt nó ra khỏi danh sách.
 nào trong reel thì video đó lên spotlight và chạy ngay tại đó, không mở popup —
 nên bạn không cần sửa gì để họ xem được cái khác.
 
+Chiều cao dải spotlight nằm ở `--band-h` trong
+`src/components/Spotlight.module.css`. Đổi số đó là đổi luôn cả ảnh tĩnh và
+player, vì cả hai đo theo nó — không có chỗ thứ hai phải sửa theo.
+
 **Ảnh chân dung**: chép ảnh vuông (~400×400) vào `public/images/`, rồi mở
 `src/data/profile.ts` sửa `avatarImage: "/images/avatar.jpg"`. Khi còn `null`
 thì khối avatar không hiện.
@@ -159,10 +163,41 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
   trang phía sau và trả con trỏ bàn phím về đúng thẻ video đã bấm.
 - Từ 900px trở lên, cột trái (ảnh bìa + thông tin liên hệ) dính lại khi cuộn
   trang, và video chạy ngay trên "spotlight" phía trên thay vì mở popup —
-  bấm thẻ nào thì trang tự cuộn lên đó. Khung player lấy đúng tỉ lệ của video
-  (16:9 hay 9:16) và cao tối đa 70% màn hình, nên không bao giờ có viền đen.
-  Dưới 900px cả hai điều này tắt hẳn: ảnh bìa quay lại full-bleed, spotlight
-  không render, bấm thẻ vẫn mở popup — layout y hệt bản gốc.
+  bấm thẻ nào thì trang tự cuộn lên đó. Dưới 900px cả hai điều này tắt hẳn: ảnh
+  bìa quay lại full-bleed, spotlight không render, bấm thẻ vẫn mở popup —
+  layout y hệt bản gốc.
+- Spotlight là một **dải chiếu cao cố định** (`clamp(382px, 62dvh, 560px)`), nền
+  tối, và mọi thứ chỉ thay đổi *bên trong* nó: ảnh tĩnh phủ kín dải, player thì
+  lấy đúng tỉ lệ của video và nằm giữa. Nhờ vậy bấm phát không làm trang nhảy
+  một pixel nào — trước đó ảnh tĩnh cao cố định 380px còn player tự cao theo
+  video, nên ở màn 1280×800 một cú bấm đẩy trang xuống 265px và bóp dải từ
+  1239px còn 315px.
+- 13 trong 15 video là 9:16, nên phần lớn thời gian player chỉ chiếm một phần
+  tư dải. Chỗ còn lại là chính tấm thumbnail đó phóng to và làm mờ
+  (`blur(36px)`) — màu của video tràn ra quanh nó thay vì để lại một khoảng
+  trắng. Ảnh mờ dùng `sizes="320px"`, ra đúng tile 640w mà thẻ trong reel đã
+  tải, nên không tốn thêm request nào.
+- Nút phóng to của player là nút **của YouTube**, nằm trong iframe khác origin.
+  Nó gọi Fullscreen API của trình duyệt bọc ngoài, nên có ăn hay không là quyết
+  định của trình duyệt đó — trang không biết và không can thiệp được. Webview
+  xem trước của Claude Code chẳng hạn, nuốt luôn mọi yêu cầu fullscreen, kể cả
+  của chính trang (`document.documentElement.requestFullscreen()` treo vĩnh
+  viễn, không resolve cũng không reject). Trên trình duyệt thật thì bình thường.
+- Dòng liên hệ cuối (số điện thoại) có **lá cờ Việt Nam ở đầu bên kia**, cỡ
+  30×20 — không còn chữ "Based in Vietnam" bên cạnh, nên lá cờ tự nó là câu nói
+  đó và `aria-label` của nó là chỗ duy nhất còn ghi. Đẩy sang phải bằng
+  `margin-left: auto` chứ không phải `space-between`: `space-between` sẽ tách
+  luôn icon điện thoại khỏi con số nó đứng trước.
+- Ảnh bìa được **lật ngang** (`scaleX(-1)`) nhưng chỉ từ 900px trở lên: ở đó anh
+  ấy nhìn về phía tên và reel thay vì nhìn ra ngoài trang. Dưới 900px banner
+  chiếm trọn bề ngang, không có gì bên cạnh để nhìn về, nên giữ nguyên khung
+  gốc.
+- Reel có hai cách đi hết danh sách: dưới 900px là "Load more", từ 900px trở lên
+  là **sang trang, 6 video một trang**. Sáu vì lưới ở cỡ đó là 3 cột ở 1280px và
+  2 cột từ 900–1228px — sáu chia hết cho cả hai nên hàng cuối không bao giờ bị
+  lẻ. Cả hai chế độ dùng **cùng một biến state** ("khách đã xin đi sâu thêm mấy
+  lần"), mỗi bên đọc theo cách của mình, nên co giãn cửa sổ qua mốc 900px vẫn
+  giữ đúng chỗ đang xem chứ không nhảy về đầu.
 - Dòng "Camera Operator - Editor" và lá cờ Việt Nam dàn hai đầu một hàng. Trong
   cột trái hẹp (300px) chỉ còn lá cờ: hai đoạn chữ cộng lại cần 291px mà cột chỉ
   có 277px. Lá cờ được vẽ bằng SVG chứ không dùng emoji 🇻🇳 — Chrome trên

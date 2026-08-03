@@ -25,34 +25,71 @@
   outline: none;
 }
 
-/* Resets a <button> back to a plain block — the still fills it edge to edge. */
-.button {
-  display: block;
-  width: 100%;
-  padding: 0;
+/*
+ * The frame, and the one thing on this strip whose geometry never changes.
+ *
+ * It used to change twice over: the still was a fixed 380px band because a crop
+ * can be any height, while the player took the video's own shape with its
+ * height capped — so at 1280x800 a click moved the page 265px and shrank the
+ * strip from 1239px to 315px. Now the box is constant and only its contents
+ * differ: the still fills it, the player sits centred inside it.
+ *
+ * The height is a range rather than a number. 62dvh gives a tall display a
+ * bigger player and keeps a short one from having to scroll to reach the bottom
+ * of the video; the 382px floor is what the still measured before this change,
+ * so the opening view of the page never got shorter. `dvh` not `vh`, as in
+ * VideoModal's portrait dialog — a `vh` cap is measured against the tallest the
+ * viewport ever gets, so a browser with retracting chrome would let the player
+ * run off the bottom.
+ */
+.band {
+  --band-h: clamp(382px, 62dvh, 560px);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--band-h);
   overflow: hidden;
-  text-align: left;
+  /* Dark, because thirteen of the fifteen pieces are 9:16: a tall player leaves
+     most of this box empty, and on the page's white that read as a hole. */
+  background: var(--color-neutral-900);
+  /* The hairline and radius every card on the page carries, applied here rather
+     than borrowed from `.card`, whose padding and flex column the frame would
+     only have to undo. */
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+}
+
+/* The still fills the frame edge to edge. `absolute` also keeps it clear of the
+   flex centring, which exists for the player. The rest resets a <button> back
+   to a plain box. */
+.still {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: none;
   font: inherit;
   color: inherit;
   cursor: pointer;
-}
-
-.frame {
-  position: relative;
-  height: 380px;
 }
 
 .image {
   object-fit: cover;
 }
 
-.scrim {
+/* Keeps the play mark legible over a bright frame and pulls the eye to the
+   middle of the strip. It replaces a bottom-up gradient that was there to sit
+   under the caption, which now lives below the frame instead. */
+.veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--color-neutral-900) 75%, transparent) 0%,
-    transparent 45%
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-neutral-900) 45%, transparent) 0%,
+    color-mix(in srgb, var(--color-neutral-900) 18%, transparent) 55%,
+    transparent 100%
   );
 }
 
@@ -64,57 +101,55 @@
   justify-content: center;
 }
 
+/* The thumbnail again, blown up and thrown out of focus. Scaled past the edges
+   so the blur's own soft border falls outside the frame instead of showing as a
+   pale inset rectangle. */
+.ambient {
+  object-fit: cover;
+  transform: scale(1.15);
+  filter: blur(36px) saturate(1.3) brightness(0.5);
+  /* Load-bearing. `filter` puts this on its own composited layer, and that layer
+     covers the player's rectangle — which holds a cross-origin iframe, so its
+     input is routed from the compositor's hit-test data rather than from the
+     DOM. With the backdrop in that data, clicks on the video never reached
+     YouTube and it could not be paused. Nothing here is meant to be clicked
+     anyway. */
+  pointer-events: none;
+}
+
 /*
- * Playing.
+ * Width first, height derived from it. The reverse — a definite height with
+ * `max-width` to catch the overflow — breaks the frame: the clamp shortens the
+ * width while the height stays put, and the box stops matching the video. This
+ * way the only case width binds first is a landscape piece in a window too
+ * narrow for it, and then the band letterboxes it, which is what a theatre is
+ * for.
  *
- * The still is a 380px band because it is a crop; a player is not, and cropping
- * one only means black bars. So the frame takes the video's own shape and the
- * height is capped instead — width is derived from that cap so the box is never
- * wider than the aspect ratio can fill. On an 800px-tall laptop that lands a
- * 16:9 piece at 995×560 and a 9:16 one at 315×560, both whole on the screen.
- *
- * `.stage` carries the same width so the caption stays under the player rather
- * than stranded at the left edge when a portrait video narrows it.
+ * `relative` puts it above the ambient wash, which is positioned and would
+ * otherwise paint over a static sibling.
  */
-.stage {
-  /* `dvh`, as in VideoModal's portrait dialog — a `vh` cap is measured against
-     the tallest the viewport ever gets, so a browser with retracting chrome
-     would let the player run off the bottom. */
-  --player-max-h: 70dvh;
-
-  width: min(100%, calc(var(--player-max-h) * 16 / 9));
-  margin-inline: auto;
-}
-
-.stagePortrait {
-  width: min(100%, calc(var(--player-max-h) * 9 / 16));
-}
-
 .player {
+  position: relative;
   aspect-ratio: 16 / 9;
-  /* The hairline and radius every card on the page carries, applied here
-     rather than borrowed from `.card`, whose padding and flex column the
-     frame would only have to undo. */
-  border: 1px solid var(--color-divider);
-  border-radius: var(--radius-md);
+  width: min(100%, calc(var(--band-h) * 16 / 9));
+  border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--color-neutral-800);
+  /* Lifts the player off the wash behind it. A hairline would disappear into
+     it — this is the one place on the page where a border cannot do the job. */
+  box-shadow: 0 18px 48px color-mix(in srgb, var(--color-neutral-900) 60%, transparent);
 }
 
 .playerPortrait {
   aspect-ratio: 9 / 16;
+  width: min(100%, calc(var(--band-h) * 9 / 16));
 }
 
+/* Under the frame in both states. Over the still it would be white text on a
+   photograph, which looks better — but then the still costs no height and the
+   player costs 87px, and the strip goes back to changing size on a click. Over
+   the player it is worse than that: it would sit on top of YouTube's scrubber. */
 .caption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: var(--space-4) var(--space-6);
-  color: var(--color-bg);
-}
-
-.captionBelow {
   padding-top: var(--space-3);
 }
 
@@ -129,14 +164,5 @@
   gap: 6px;
   margin-top: 4px;
   font-size: 13px;
-}
-
-/* Over the photograph the whole caption is white and the meta line steps back
-   with opacity; on the page it steps back with colour instead. */
-.caption .meta {
-  opacity: 0.85;
-}
-
-.captionBelow .meta {
   color: color-mix(in srgb, var(--color-text) 60%, transparent);
 }

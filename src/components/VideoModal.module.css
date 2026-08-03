@@ -23,16 +23,26 @@
   aspect-ratio: 9 / 16;
 }
 
+/* `flex-start` rather than centred: the left side is two lines now, and a close
+   button floating between them reads as belonging to neither. It sits on the
+   title's line, which is what it closes. */
 .head {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-3);
 }
 
-.title {
+.heading {
   min-width: 0;
+}
+
+.title {
   overflow-wrap: anywhere;
+}
+
+.role {
+  margin-top: 2px;
 }
 
 .close {

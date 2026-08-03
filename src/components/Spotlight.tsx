@@ -8,10 +8,19 @@ import { useSpotlight } from "./PlaybackProvider";
 import { VideoEmbed } from "./VideoEmbed";
 import styles from "./Spotlight.module.css";
 
-/** Title and credits — over the still, then under the player. */
+/**
+ * The strip is the page's full width less one gutter each side, and the page
+ * stops widening at `--page-max` — so above 1280px the box is a fixed 1239px
+ * and below it tracks the viewport. Saying "1280px" flat instead would have the
+ * browser buy a 1280px slot on a 1024px window and fetch the 3840w tile for a
+ * 983px box.
+ */
+const FRAME_SIZES = "(min-width: 1280px) 1239px, calc(100vw - 41px)";
+
+/** Title and credits — under the frame, in both states. */
 function Caption({ video }: { video: Video }) {
   return (
-    <>
+    <div className={styles.caption}>
       <div className={`card-title ${styles.title}`}>{video.title}</div>
       <div className={styles.meta}>
         <span>{video.client}</span>
@@ -24,16 +33,17 @@ function Caption({ video }: { video: Video }) {
           </>
         ) : null}
       </div>
-    </>
+    </div>
   );
 }
 
 /**
- * The frame before anything is playing. Keyed by `video.id` where it is
- * mounted, so its thumbnail walk (see `useThumbnailSrc`) starts over for each
- * video rather than inheriting where the last one gave up.
+ * The frame before anything is playing: the thumbnail cropped to fill the whole
+ * band. Keyed by `video.id` where it is mounted, so its thumbnail walk (see
+ * `useThumbnailSrc`) starts over for each video rather than inheriting where
+ * the last one gave up.
  */
-function SpotlightStill({
+function Still({
   video,
   onPlay,
 }: {
@@ -46,43 +56,66 @@ function SpotlightStill({
     <button
       type="button"
       onClick={() => onPlay(video)}
-      className={`card ${styles.button}`}
+      className={`${styles.still} ${thumbSrc ? "" : "stripe-fill"}`}
       aria-label={`Play ${video.title} — ${video.client}`}
     >
-      <div className={`${styles.frame} ${thumbSrc ? "" : "stripe-fill"}`}>
-        {thumbSrc ? (
-          /* The strip is the page's full width less one gutter each side, and
-             the page stops widening at `--page-max` — so above 1280px the box
-             is a fixed 1239px and below it tracks the viewport. Saying
-             "1280px" flat instead would have the browser buy a 1280px slot on
-             a 1024px window and fetch the 3840w tile for a 983px box. */
-          <Image
-            src={thumbSrc}
-            alt=""
-            fill
-            sizes="(min-width: 1280px) 1239px, calc(100vw - 41px)"
-            className={styles.image}
-            onError={onError}
-          />
-        ) : null}
+      {thumbSrc ? (
+        <Image
+          src={thumbSrc}
+          alt=""
+          fill
+          sizes={FRAME_SIZES}
+          className={styles.image}
+          onError={onError}
+        />
+      ) : null}
 
-        {video.youtubeId ? null : (
-          <span className="stripe-label">[ awaiting YouTube link ]</span>
-        )}
-
-        <div className={styles.scrim} />
-
-        {video.youtubeId ? (
+      {video.youtubeId ? (
+        <>
+          <div className={styles.veil} />
           <span className={styles.play}>
             <PlayMark size={72} />
           </span>
-        ) : null}
-
-        <div className={styles.caption}>
-          <Caption video={video} />
-        </div>
-      </div>
+        </>
+      ) : (
+        <span className="stripe-label">[ awaiting YouTube link ]</span>
+      )}
     </button>
+  );
+}
+
+/**
+ * The video's own colours behind the player, blown up and thrown out of focus.
+ *
+ * Thirteen of the fifteen pieces are 9:16, so most of the time the player covers
+ * a quarter of the band and the rest of it is backdrop. A flat dark rectangle
+ * there would only be a tidier version of the hole this replaces; the piece's
+ * own light spilling out around it is what makes the strip read as a screening
+ * rather than as an empty row.
+ *
+ * Keyed by `video.id` for the same reason as `Still` — the thumbnail walk is
+ * per-mount.
+ */
+function Ambient({ video }: { video: Video }) {
+  const { src, onError } = useThumbnailSrc(video.youtubeId);
+
+  // Nothing to blur: a video YouTube has no still for at all. The band's own
+  // dark is the backdrop then.
+  if (!src) return null;
+
+  return (
+    <Image
+      src={src}
+      alt=""
+      aria-hidden="true"
+      fill
+      /* Deliberately small. A 36px blur cannot show detail no matter what is
+         fed to it, and this stop resolves to the same tile the reel card
+         already fetched for this video, so the backdrop costs no request. */
+      sizes="320px"
+      className={styles.ambient}
+      onError={onError}
+    />
   );
 }
 
@@ -117,22 +150,24 @@ export function Spotlight() {
       aria-label="Spotlight"
       className={styles.section}
     >
-      {isPlaying ? (
-        <div className={`${styles.stage} ${isPortrait ? styles.stagePortrait : ""}`}>
-          <div className={`${styles.player} ${isPortrait ? styles.playerPortrait : ""}`}>
-            {/* Keyed by id so choosing another video builds a fresh player
-                rather than handing the running one a new src. */}
-            <VideoEmbed key={featured.id} video={featured} />
-          </div>
-          {/* Under the player, not over it: overlaid text would sit on top of
-              YouTube's scrubber and controls. */}
-          <div className={styles.captionBelow}>
-            <Caption video={featured} />
-          </div>
-        </div>
-      ) : (
-        <SpotlightStill key={featured.id} video={featured} onPlay={select} />
-      )}
+      <div className={styles.band}>
+        {isPlaying ? (
+          <>
+            <Ambient key={featured.id} video={featured} />
+            <div
+              className={`${styles.player} ${isPortrait ? styles.playerPortrait : ""}`}
+            >
+              {/* Keyed by id so choosing another video builds a fresh player
+                  rather than handing the running one a new src. */}
+              <VideoEmbed key={featured.id} video={featured} />
+            </div>
+          </>
+        ) : (
+          <Still key={featured.id} video={featured} onPlay={select} />
+        )}
+      </div>
+
+      <Caption video={featured} />
     </section>
   );
 }

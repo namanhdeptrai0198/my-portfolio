@@ -30,6 +30,25 @@
   z-index: 1;
 }
 
+/* At rest the mark lands on a face as often as not, and six of them in a grid
+   read as six buttons rather than six pieces of work — so where there is a
+   pointer, it waits for one. The duration badge stays put and is what says
+   "video" at rest.
+   `focus-visible` keeps the keyboard equal to the mouse, and the `hover: hover`
+   gate leaves a phone — which has no hover to reveal anything with — exactly
+   the mark it has always had. */
+@media (hover: hover) {
+  .play {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .card:hover .play,
+  .card:focus-visible .play {
+    opacity: 1;
+  }
+}
+
 .duration {
   position: absolute;
   right: 8px;

@@ -8,6 +8,14 @@ import styles from "./ProfileCard.module.css";
 const ICON = { size: 15, strokeWidth: 1.5 } as const;
 
 /**
+ * Twice the interface icon size. It is no longer a bullet in front of a phrase
+ * that says the same thing — it is the whole statement now, alone at the end of
+ * a row, and at 15px a red rectangle that small reads as a stray swatch rather
+ * than as a flag.
+ */
+const FLAG_SIZE = ICON.size * 2;
+
+/**
  * Name, role and the two ways to reach him. On a wide screen this is the left
  * column and it stays put while the reel scrolls past — the whole point of the
  * page is that a client who likes something can act on it without hunting back
@@ -34,28 +42,23 @@ export function ProfileCard() {
 
       <h1 className={styles.name}>{profile.name}</h1>
 
-      {/* What he does and where he is are the two facts a client checks first,
-          so they share a line and sit at opposite ends of it. */}
-      <div className={styles.roleRow}>
-        <p className={styles.role}>{profile.role}</p>
-        <p className={`${styles.contactRow} ${styles.location}`}>
-          <VietnamFlag size={ICON.size} label={profile.location} />
-          {/* The flag already carries this as its accessible name — see
-              VietnamFlag — so the text here is decoration for the eye only. */}
-          <span data-location aria-hidden="true">
-            {profile.location}
-          </span>
-        </p>
-      </div>
+      <p className={styles.role}>{profile.role}</p>
 
       <p className={styles.contactRow}>
         <Mail {...ICON} aria-hidden="true" />
         <a href={`mailto:${profile.email}`}>{profile.email}</a>
       </p>
 
+      {/* Where he is, at the far end of the last line of how to reach him — the
+          three rows now read as one block of contact details rather than as a
+          fact about him and then a way to call him.
+          The words are gone and the flag is not decoration any more: it is the
+          only thing left saying "Vietnam", which is why `VietnamFlag` carries
+          that sentence as its accessible name. */}
       <p className={`${styles.contactRow} ${styles.lastRow}`}>
         <Phone {...ICON} aria-hidden="true" />
         <a href={`tel:${profile.phoneHref}`}>{profile.phoneLabel}</a>
+        <VietnamFlag size={FLAG_SIZE} label={profile.location} />
       </p>
 
       {/* Only earns its keep in the stacked layout, where it separates this

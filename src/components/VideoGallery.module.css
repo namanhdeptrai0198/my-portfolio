@@ -1,5 +1,9 @@
 .section {
   padding: 0 var(--page-pad) var(--space-8);
+  /* Turning a page scrolls this to the top of the viewport (see
+     scrollToStart) — the same gutter the spotlight reserves above itself, so
+     the heading does not end up flush against the edge of the window. */
+  scroll-margin-top: var(--space-6);
 }
 
 .header {
@@ -22,14 +26,30 @@
   gap: var(--space-6) var(--space-4);
 }
 
-.loadMore {
+/* Below the reel sits whichever control that layout uses to go further into it:
+   one "Load more" button, or the pager's three items. */
+.foot {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: var(--space-4);
   padding: 0 var(--page-pad) var(--space-8);
 }
 
 .loadMoreButton {
   gap: 8px;
+}
+
+/* `tabular-nums` and a floor on the width so the two buttons hold still as the
+   count goes from 1 to 10 — a pager that shifts under the cursor makes the
+   visitor re-aim for every page. */
+.count {
+  min-width: 46px;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
 }
 
 .empty {

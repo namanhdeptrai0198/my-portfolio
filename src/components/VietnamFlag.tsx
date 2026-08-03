@@ -2,10 +2,8 @@ type Props = {
   /** Width in px; the height follows from the flag's fixed 3:2 ratio. */
   size?: number;
   /**
-   * The accessible name. It lives on the flag rather than on the text beside
-   * it because the narrow left column hides that text — see the
-   * `[data-location]` rule in app/page.module.css. Naming the flag keeps the
-   * line readable to a screen reader at every width.
+   * The accessible name, and load-bearing: there is no text beside the flag any
+   * more, so this sentence is the only place "Based in Vietnam" is said at all.
    */
   label: string;
 };

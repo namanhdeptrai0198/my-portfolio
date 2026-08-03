@@ -10,16 +10,11 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
+import { WIDE } from "@/lib/breakpoints";
+import { scrollToStart } from "@/lib/scrollToStart";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { Video } from "@/lib/videos";
 import { VideoModal } from "./VideoModal";
-
-/**
- * The layout switch, read from JavaScript. It has to stay in step with the
- * `@media (min-width: 900px)` blocks in app/page.module.css and
- * Spotlight.module.css: below it there is no spotlight to play anything in.
- */
-const WIDE = "(min-width: 900px)";
 
 type SpotlightState = {
   /** The video sitting in the spotlight. */
@@ -94,12 +89,10 @@ export function PlaybackProvider({ initial, children }: Props) {
       // Without this, clicking a card near the bottom of a long reel changes
       // something a screenful above and reads as a dead click.
       const node = spotlightRef.current;
-      if (!node) return;
-      const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      node.scrollIntoView({ block: "start", behavior: still ? "auto" : "smooth" });
+      scrollToStart(node);
       // The scroll moves the page for the eye; this moves it for the keyboard
       // and the screen reader, which would otherwise be left on the card.
-      node.focus({ preventScroll: true });
+      node?.focus({ preventScroll: true });
     },
     [isWide],
   );
