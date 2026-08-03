@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nguyễn Ngọc Nam Anh">
+  <!--
+    The tab icon. Next.js picks this up from its filename alone — see
+    node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/01-metadata/app-icons.md
+    — and it replaces the scaffold's `favicon.ico`, which was still shipping the
+    Next.js logo on a camera operator's site.
+
+    A lens rather than initials: a favicon is read at 16px, and two condensed
+    Vietnamese letters at that size are a smudge. The iris is a hexagon because
+    a plain dot inside a ring is any camera app's icon; six flat sides say
+    aperture. Nothing here is thinner than a twelfth of the frame, so it all
+    survives the 16px raster.
+
+    Colours are the design system's own `--color-neutral-900` and `--color-bg`,
+    written out rather than referenced: an icon is fetched on its own and
+    inherits no stylesheet.
+  -->
+  <rect width="64" height="64" rx="12" fill="#2b2b2d" />
+  <circle cx="32" cy="32" r="20" fill="none" stroke="#f2f2f3" stroke-width="5" />
+  <polygon points="32,20 42.39,26 42.39,38 32,44 21.61,38 21.61,26" fill="#f2f2f3" />
+</svg>

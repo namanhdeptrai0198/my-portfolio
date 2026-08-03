@@ -20,7 +20,28 @@ const barlowCondensed = Barlow_Condensed({
   display: "swap",
 });
 
+/**
+ * Where this site actually lives, needed because `openGraph.images` below is a
+ * relative path and a scraper reading the page from Facebook or Zalo has no
+ * page to resolve it against. Without this Next falls back to
+ * `http://localhost:3000` — the build says so in a warning — and every shared
+ * link renders a card with a broken image.
+ *
+ * Read from the environment rather than typed in, because the answer changes
+ * and a hardcoded one goes stale silently. Vercel sets
+ * `VERCEL_PROJECT_PRODUCTION_URL` to the project's production hostname on every
+ * build, including after a custom domain is attached, so this follows the
+ * domain instead of having to be chased. `NEXT_PUBLIC_SITE_URL` is the override
+ * for anywhere that is not Vercel; localhost is only ever the local fallback.
+ */
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: profile.siteTitle,
   description: profile.siteDescription,
   openGraph: {
