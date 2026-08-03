@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nguyễn Ngọc Nam Anh">
   <!--
-    The tab icon. Next.js picks this up from its filename alone — see
+    The tab icon, replacing the scaffold's favicon.ico, which was still shipping
+    the Next.js logo on a camera operator's site. Next.js picks this up from its
+    filename alone; the rules are in
     node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/01-metadata/app-icons.md
-    — and it replaces the scaffold's `favicon.ico`, which was still shipping the
-    Next.js logo on a camera operator's site.
 
     A lens rather than initials: a favicon is read at 16px, and two condensed
     Vietnamese letters at that size are a smudge. The iris is a hexagon because
@@ -11,9 +11,11 @@
     aperture. Nothing here is thinner than a twelfth of the frame, so it all
     survives the 16px raster.
 
-    Colours are the design system's own `--color-neutral-900` and `--color-bg`,
-    written out rather than referenced: an icon is fetched on its own and
-    inherits no stylesheet.
+    The two colours are the design system's neutral 900 and page background,
+    written as literals rather than as custom properties: an icon is fetched on
+    its own and inherits no stylesheet. (Their token names cannot be spelled in
+    here either. An XML comment may not contain a double hyphen, which is what
+    every one of those names begins with.)
   -->
   <rect width="64" height="64" rx="12" fill="#2b2b2d" />
   <circle cx="32" cy="32" r="20" fill="none" stroke="#f2f2f3" stroke-width="5" />
