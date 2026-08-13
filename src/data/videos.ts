@@ -171,4 +171,13 @@ export const videos: Video[] = [
     youtubeId: "TiWGT0cG32I",
     orientation: "portrait",
   },
+  {
+    id: "tommy-x-minh-tu",
+    title: "Tommy x Minh Tu",
+    client: "Tommy",
+    role: "Camera Operator, Editor",
+    duration: "00:30",
+    youtubeId: "JDex3C12VKs",
+    orientation: "portrait",
+  },
 ];
