@@ -1,43 +1,50 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Nguyễn Ngọc Nam Anh">
   <!--
-    The tab icon. Next.js picks this up from its filename alone; the rules are in
+    The tab icon, redrawn from the studio's mark. Next.js picks this up from its
+    filename alone; the rules are in
     node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/01-metadata/app-icons.md
 
-    The brief: one hand, five digits, two of them closed into a ring around an
-    eye — the ring being the lens. So three fingers stand, and the index comes
-    over the top to meet the thumb underneath, which is the OK sign and is also
-    the only arrangement of a real hand that makes that ring.
+    A rounded square with an eye cut through it and two blades sheared off the top
+    left and bottom right corners, so the whole thing turns like a shutter. Built
+    as a mask rather than as outlines: the square, the eye and the two blades are
+    all subtractions from one black field, which is what keeps the white of the
+    eye and the white of the blades reading as the same cut. Draw them as separate
+    filled shapes instead and every seam between them has to be kept in register
+    by hand.
 
-    The ring is the part that has to be built to a rule. Every stroke that forms
-    it keeps its INNER edge on the same radius, 59: the loop is r 78 with a 38
-    band, the thumb r 82 with a 46 band, and the index rides outside r 78 for its
-    whole length. Break that by a few units and the thicker stroke drives a black
-    wedge into the opening, right beside the eye. Only the outside is allowed to
-    step, and those steps are what read as separate digits.
+    Everything that touches the silhouette is deliberately made to overshoot it.
+    The eye's tips sit at x 40 and 472, outside the square's 58 and 454, so the
+    eye severs the left and right sides outright; both blades start and end well
+    past the edge they cross. An earlier version had the tips land exactly on the
+    edge and the blades stop just short of it, and both went wrong in the same
+    way: a shape that ends near a boundary leaves a rounded cap or a knife point
+    embedded in the outline, which reads as a dent in the square rather than as a
+    cut through it. Nothing here should terminate anywhere it can be seen.
 
-    The eye is one path with fill-rule="evenodd", the second contour cutting the
-    opening out of the first, with the pupil drawn separately. Its outline is the
-    first thing to go as the icon shrinks: at 32px it still reads, at 16px it
-    fills in and the mark carries on the hand and ring alone. Checked at 256, 64,
-    32 and 16 rather than assumed.
+    That overshoot costs room, and the left edge is where it runs out. Between the
+    corner arc at y 142 and the eye's upper lid at y 239 there is 97 to hold a 34
+    blade and a band of black on either side of it. That is the tightest fit in
+    the file: widen the blade, drop the corner radius, or make the eye taller, and
+    one of those two bands closes up.
 
-    The white ground is deliberate, not padding. The artwork is pure black, and a
+    Checked at 512, 64, 32 and 16 rather than assumed. The pupil's highlight is the
+    first thing to go; by 16px the mark carries on silhouette alone, which it can
+    because the silhouette is a square with two bites out of it.
+
+    The white ground is deliberate, not padding. The artwork is pure black and a
     tab strip in a dark theme would swallow it if this were transparent.
   -->
   <rect width="512" height="512" fill="#fff"/>
-  <g transform="translate(256 256) scale(1.22) translate(-310 -291)" fill="#000">
-    <path d="M 145 250 L 145 440 Q 145 470 175 470 L 275 470 Q 305 470 305 440 L 305 250 Z"/>
-    <path fill="none" stroke="#000" stroke-width="36" stroke-linecap="round" d="M 170 284 C 167 248, 167 220, 169 200"/>
-    <path fill="none" stroke="#000" stroke-width="38" stroke-linecap="round" d="M 222 284 C 219 240, 219 194, 222 166"/>
-    <path fill="none" stroke="#000" stroke-width="40" stroke-linecap="round" d="M 274 284 C 271 230, 272 176, 276 138"/>
-    <circle cx="378" cy="306" r="78" fill="none" stroke="#000" stroke-width="38"/>
-    <path fill="none" stroke="#000" stroke-width="38" stroke-linecap="round"
-          d="M 296 262 C 300 220, 334 194, 378 198 C 422 202, 454 232, 457 276"/>
-    <path fill="none" stroke="#000" stroke-width="46" stroke-linecap="round"
-          d="M 307 347 A 82 82 0 0 0 445.2 353"/>
-    <path fill-rule="evenodd" d="
-      M 334 306 C 356 270, 400 270, 422 306 C 400 342, 356 342, 334 306 Z
-      M 348 306 C 365 284, 391 284, 408 306 C 391 328, 365 328, 348 306 Z"/>
-    <circle cx="378" cy="306" r="14"/>
-  </g>
+  <mask id="cuts">
+    <rect width="512" height="512" fill="#000"/>
+    <rect x="58" y="58" width="396" height="396" rx="84" fill="#fff"/>
+    <path d="M 40 256 Q 256 48 472 256 Q 256 464 40 256 Z" fill="#000"/>
+    <path fill="none" stroke="#000" stroke-width="34" stroke-linecap="round"
+          d="M 6 236 Q 120 110 372 -4"/>
+    <path fill="none" stroke="#000" stroke-width="34" stroke-linecap="round"
+          d="M 506 276 Q 392 402 140 516"/>
+  </mask>
+  <rect width="512" height="512" fill="#000" mask="url(#cuts)"/>
+  <circle cx="256" cy="256" r="56" fill="#000"/>
+  <circle cx="234" cy="234" r="20" fill="#fff"/>
 </svg>
