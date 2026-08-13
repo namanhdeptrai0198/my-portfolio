@@ -202,3 +202,19 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
   cột trái hẹp (300px) chỉ còn lá cờ: hai đoạn chữ cộng lại cần 291px mà cột chỉ
   có 277px. Lá cờ được vẽ bằng SVG chứ không dùng emoji 🇻🇳 — Chrome trên
   Windows vẽ emoji đó thành hai chữ "VN".
+- **Favicon và mã QR** không sửa tay được — cả hai đều là output của script.
+  Logo gốc nằm ở `tools/logo-source.jpg`; `sh tools/trace-icon.sh` cắt, phóng to,
+  rồi vector hoá nó bằng `potrace` thành `src/app/icon.svg` (cần
+  `brew install potrace`). Đổi logo thì thay file JPEG rồi chạy lại, đừng sửa
+  path trong SVG. Tham số đáng nhớ là độ nhoè `-b 1.2`: trace thẳng ảnh JPEG thì
+  potrace bám theo từng vệt nhiễu nén ở mép và cho ra path 7800 ký tự, để nhoè
+  1.2 thì vẫn hình đó nhưng chỉ 2155 ký tự, đặt cạnh nhau ở 300px không phân
+  biệt được. Nhoè mạnh hơn nữa thì bốn góc vuông bắt đầu tròn đi.
+- Mã QR (`public/qr.svg`, sinh bởi `node tools/make-qr.mjs`) dùng mức sửa lỗi
+  **H** — chịu mất được ~30% diện tích, và đó là ngân sách để nhét logo vào
+  giữa. Chạy lại script mỗi khi đổi domain: không ai đọc soát được một mã QR,
+  nên mã sai domain vẫn cứ được quét và dẫn sai rất lâu sau khi một cái link
+  hỏng trong bài viết đã bị phát hiện. Kiểm bằng cách render ra ảnh ở 720 / 360 /
+  180px rồi **giải mã ngược** (jsQR) cả bản trơn lẫn bản có logo — 6/6 đều ra
+  đúng URL. Đổi cỡ hay vị trí logo thì kiểm lại như vậy, đừng tin vào phần trăm
+  diện tích.
