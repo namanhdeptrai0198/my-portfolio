@@ -173,7 +173,7 @@ export const videos: Video[] = [
   },
   {
     id: "tommy-x-minh-tu",
-    title: "Tommy x Minh Tu",
+    title: "Tommy x Minh Tú",
     client: "Tommy",
     role: "Camera Operator, Editor",
     duration: "00:30",
