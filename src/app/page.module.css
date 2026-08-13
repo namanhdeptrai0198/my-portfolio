@@ -43,6 +43,14 @@
     border-radius: var(--radius-md);
     overflow: hidden;
 
+    /* The middle of the three planes. This is the one place on the page where
+       the elevation is literally true: the column holds still while the reel
+       travels past it, so it is in front of the reel and should look it. Only
+       in this layout — below 900px it is a header in the flow, in front of
+       nothing. */
+    background: var(--color-raised);
+    box-shadow: var(--shadow-md);
+
     /* ProfileCard takes its inline padding from this token, and `.body` zeroed
        it so the two columns could share one outer gutter. Inside a bordered
        box the text has to come off the edge again — at the same `--space-3`

@@ -20,12 +20,44 @@
 }
 
 /* The same pass also paints .card and .dialog transparent, overriding the
-   surface colour .dialog is given twelve lines earlier. On a card that is the
-   intended wireframe; on a dialog it leaves the title and close button sitting
-   unreadably over whatever is behind the scrim. */
+   surface colour .dialog is given twelve lines earlier. On a dialog that leaves
+   the title and close button sitting unreadably over whatever is behind the
+   scrim; on a card it is the intended wireframe, and the third correction below
+   is where this build parts company with that intent. */
 .dialog {
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
+}
+
+/* The third correction, and the only one that changes what the system means
+   rather than what it does.
+   Transparent cards on a page the same colour leave every element on one
+   plane: a card is separated from the page by a hairline and nothing else,
+   and the reel, the identity column and the spotlight all carry that same
+   hairline, so nothing says which is nearer. This build gives them real
+   surfaces and an elevation order instead — see --color-ground/--color-raised
+   below for why the system's own bg/surface pair could not do the job.
+   .seg, .input and the secondary button come along because a transparent
+   control on the darker ground reads as text rather than as something to
+   operate — and the thinner divider below leaves them less edge than they
+   had. */
+.card,
+.dialog,
+.seg,
+.input,
+.btn-secondary {
+  background: var(--color-raised);
+}
+
+/* The system tints those two states with a translucent ink wash, which on an
+   opaque control would let the ground show through — the button would lose its
+   surface at the moment it is being pressed. Mixed into the raised colour
+   instead, the same two steps darken it and it stays a solid thing. */
+.btn-secondary:hover {
+  background: color-mix(in srgb, var(--color-text) 7%, var(--color-raised));
+}
+
+.btn-secondary:active {
+  background: color-mix(in srgb, var(--color-text) 14%, var(--color-raised));
 }
 
 :root {
@@ -40,6 +72,40 @@
      width it was designed at. */
   --page-max: 1280px;
   --page-pad: var(--space-6);
+
+  /* The ground, and the plane that sits on it.
+     The system already ships a pair for this — --color-bg and --color-surface —
+     but they run the wrong way: the surface (#e9e9ea) is *darker* than the page
+     (#f2f2f3), so a card painted with it reads as a hole rather than a card.
+     This pair runs the right way. The ground is the ramp's own neutral-200, so
+     it stays in the system; the raised plane is white, ~5% of lightness above
+     it, which with the shadows below is enough to read at a glance.
+     --color-bg is deliberately left where it is: the system uses it as a
+     *reversed text* colour in three places — .btn-primary's label, .duration on
+     VideoCard, and the checked radio's inset ring — and darkening it would cost
+     all three contrast to buy nothing here. */
+  --color-ground: var(--color-neutral-200);
+  --color-raised: #ffffff;
+
+  /* Two-layer elevation: a tight contact shadow that anchors the element to
+     the ground, and a wide ambient one that carries the distance. The system's
+     single 2px/10px/32px layers were doing only the second half of that job,
+     and --shadow-sm was small enough that a card wearing .elev-sm looked no
+     different from one that wasn't. */
+  --shadow-sm:
+    0 1px 2px color-mix(in srgb, #2b2b2d 8%, transparent),
+    0 3px 8px color-mix(in srgb, #2b2b2d 10%, transparent);
+  --shadow-md:
+    0 2px 4px color-mix(in srgb, #2b2b2d 10%, transparent),
+    0 10px 24px color-mix(in srgb, #2b2b2d 14%, transparent);
+  --shadow-lg:
+    0 6px 12px color-mix(in srgb, #2b2b2d 12%, transparent),
+    0 28px 56px color-mix(in srgb, #2b2b2d 20%, transparent);
+
+  /* With a surface of its own to sit on, a card no longer needs a 16% hairline
+     to be a card — at that weight the border now competes with the shadow.
+     Dropped to 10%, where it goes back to being a seam. */
+  --color-divider: color-mix(in srgb, #1d1f20 10%, transparent);
 }
 
 html {
@@ -48,7 +114,7 @@ html {
 
 body {
   min-height: 100vh;
-  background: var(--color-bg);
+  background: var(--color-ground);
   color: var(--color-text);
   font-family: var(--font-body);
 }

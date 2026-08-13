@@ -59,6 +59,11 @@
      only have to undo. */
   border: 1px solid var(--color-divider);
   border-radius: var(--radius-md);
+  /* Top of the page's three planes — spotlight, then the identity column, then
+     the reel's cards. The frame is already the darkest thing on the page, so it
+     is the one element that can carry the largest shadow without the shadow
+     becoming the thing you notice. */
+  box-shadow: var(--shadow-lg);
 }
 
 /* The still fills the frame edge to edge. `absolute` also keeps it clear of the

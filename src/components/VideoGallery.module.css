@@ -23,7 +23,11 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-6) var(--space-4);
+  /* Rows wider than columns, not the reverse: the column gap was the tighter of
+     the two, which fused each row into one continuous band. Now every card has
+     its own air. The track minimum stays at 280px — VideoCard's `sizes` string
+     is worked out from that number. */
+  gap: var(--space-8) var(--space-6);
 }
 
 /* Below the reel sits whichever control that layout uses to go further into it:

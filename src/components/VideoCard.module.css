@@ -47,6 +47,35 @@
   .card:focus-visible .play {
     opacity: 1;
   }
+
+  /* The card is a button, and lifting it under the cursor is the cheapest
+     depth cue on the page — the shadow it casts is the only one a visitor sees
+     change, so it is the one that says these are objects on a surface rather
+     than regions of a page.
+     `.card:hover` outranks the `.elev-sm` the button also carries whatever
+     order the two stylesheets are injected in, so the rest state needs no
+     help holding its own shadow. */
+  .card {
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .card:hover,
+  .card:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* The global reduce rule collapses the transition but not the transform, which
+   would leave the card jumping 3px instead of travelling them. Let the shadow
+   do the whole job here. */
+@media (prefers-reduced-motion: reduce) {
+  .card:hover,
+  .card:focus-visible {
+    transform: none;
+  }
 }
 
 .duration {
@@ -62,8 +91,12 @@
   color: var(--color-bg);
 }
 
+/* The thumbnail is the darkest thing in the card and runs to its edge, so
+   without a seam here the card's boundary is drawn by the photograph rather
+   than by the card. */
 .body {
   padding: var(--space-3);
+  border-top: 1px solid var(--color-divider);
 }
 
 .title {
