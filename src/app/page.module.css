@@ -6,7 +6,7 @@
 /*
  * Below this everything stacks and reads top to bottom, exactly as before.
  *
- * Above it the identity block becomes a fixed left column that the reel scrolls
+ * Above it the identity block becomes a fixed right column that the reel scrolls
  * past. Every rule that switch depends on lives in this block — including the
  * ones that act on ProfileCard — so the breakpoint is written once and the two
  * halves of the layout cannot drift apart.
@@ -28,17 +28,26 @@
     --page-pad: 0;
 
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) 300px;
     gap: var(--space-6);
     /* Both columns start at the same y — the top gutter belongs to the grid,
        not to one of its children. */
     padding: var(--space-6) var(--space-6) 0;
   }
 
-  /* `align-self: start` is load-bearing: it keeps the box at its content
-     height so it has room to travel down the full-height grid area behind
-     it. Stretched, it would have nowhere to stick to. */
+  /* Placed rather than flowed. The identity block is first in the markup and
+     stays there — stacked below this breakpoint it is the page's header, and
+     its <h1> is the document's first heading either way — but on screen here it
+     belongs on the right, with the work leading. Naming both columns is what
+     lets the two orders differ without a single element moving in the markup.
+
+     `align-self: start` is load-bearing: it keeps the box at its content height
+     so it has room to travel down the full-height grid area behind it.
+     Stretched, it would have nowhere to stick to. */
   .identity {
+    grid-column: 2;
+    grid-row: 1;
+
     position: sticky;
     top: var(--space-6);
     align-self: start;
@@ -84,20 +93,6 @@
     aspect-ratio: 1;
   }
 
-  /* He is shot in profile looking off the left edge of the photograph. In this
-     layout that points the eye out of the page, away from the name under him
-     and the reel beside him; mirrored, he looks into both.
-     Only here. Full-bleed below the switch the banner is the whole width and there
-     is nothing to the side to look towards, so that crop keeps the frame as
-     it was shot — which is also why this rule lives in this file rather than
-     in CoverBanner.module.css, with every other rule the switch owns.
-     No crop moves: `object-position` is horizontally centred, so the flip only
-     swaps which side of the frame each thing sits on, and nothing in shot
-     reads as text — the practicals are bare panels. */
-  .identity > :first-child img {
-    transform: scaleX(-1);
-  }
-
   /* The rule under the identity block only separates it from the reel when the
      reel is below it. Side by side, the gap does that job. */
   .identity :global(.hr) {
@@ -107,6 +102,9 @@
   /* The reel column has to be allowed to be shorter than the viewport without
      the sticky column stretching to match it. */
   .reel {
+    grid-column: 1;
+    grid-row: 1;
+
     min-width: 0;
   }
 

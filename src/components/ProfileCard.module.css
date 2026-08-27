@@ -44,7 +44,7 @@
   margin: var(--space-6) 0;
 }
 
-/* Everything that changes when this becomes the sticky left column lives in
+/* Everything that changes when this becomes the sticky right column lives in
    app/page.module.css, with the rest of that layout switch. */
 
 @media (max-width: 480px) {

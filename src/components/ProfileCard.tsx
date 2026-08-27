@@ -12,7 +12,7 @@ import styles from "./ProfileCard.module.css";
 const FLAG_SIZE = MARK_SIZE * 1.5;
 
 /**
- * Name, role and the two ways to reach him. On a wide screen this is the left
+ * Name, role and the ways to reach him. On a wide screen this is the right
  * column and it stays put while the reel scrolls past — the whole point of the
  * page is that a client who likes something can act on it without hunting back
  * up for a phone number.

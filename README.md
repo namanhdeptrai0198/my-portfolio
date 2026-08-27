@@ -188,10 +188,15 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
   đó và `aria-label` của nó là chỗ duy nhất còn ghi. Đẩy sang phải bằng
   `margin-left: auto` chứ không phải `space-between`: `space-between` sẽ tách
   luôn icon điện thoại khỏi con số nó đứng trước.
-- Ảnh bìa được **lật ngang** (`scaleX(-1)`) nhưng chỉ từ 900px trở lên: ở đó anh
-  ấy nhìn về phía tên và reel thay vì nhìn ra ngoài trang. Dưới 900px banner
-  chiếm trọn bề ngang, không có gì bên cạnh để nhìn về, nên giữ nguyên khung
-  gốc.
+- Ở layout hai cột, **reel nằm bên trái và khối identity nằm bên phải** — công
+  việc dẫn trước, danh tính đứng cạnh. Thứ tự trong markup thì ngược lại:
+  identity vẫn là phần tử đầu tiên, vì khi xếp dọc nó là header của trang và
+  `<h1>` của nó phải là heading đầu tiên của document ở cả hai layout. Hai thứ
+  tự khác nhau được tách ra bằng `grid-column` đặt tên cho từng cột, không phần
+  tử nào phải đổi chỗ trong markup.
+- Ảnh bìa **giữ nguyên khung gốc**, không lật. Anh ấy được chụp nghiêng nhìn về
+  bên trái; với cột identity nằm bên phải thì ánh nhìn đó vốn đã hướng vào trong
+  trang, về phía reel.
 - Reel có hai cách đi hết danh sách: dưới 900px là "Load more", từ 900px trở lên
   là **sang trang, 6 video một trang**. Sáu vì lưới ở cỡ đó là 3 cột ở 1280px và
   2 cột từ 900–1228px — sáu chia hết cho cả hai nên hàng cuối không bao giờ bị
