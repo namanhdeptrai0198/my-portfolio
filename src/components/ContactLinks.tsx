@@ -93,10 +93,11 @@ function InstagramMark() {
  * the label, and still shown on hover.
  *
  * The order runs from the cheapest thing to ask of a visitor to the most
- * expensive: two profiles to look through before deciding anything, then the
- * two that reach him personally, phone last-but-one and mail at the end where
- * the eye stops. It is also roughly how a client actually arrives — scroll the
- * work, then make contact.
+ * expensive: two profiles to look through before deciding anything, then mail,
+ * then the phone at the end. Ringing someone is the largest of the four — it
+ * interrupts him, it happens now, and it cannot be drafted — so it sits where
+ * the eye stops rather than in the middle of the row. It is also roughly how a
+ * client actually arrives: scroll the work, write, then call.
  *
  * `instagram://` takes a bare username, while Facebook's app has no username
  * form and takes the whole web address instead. Both are derived from the URLs
@@ -135,19 +136,19 @@ export function ContactLinks() {
       ) : null}
       <a
         className={styles.link}
-        href={`tel:${profile.phoneHref}`}
-        title={profile.phoneLabel}
-        aria-label={`Call ${profile.phoneLabel}`}
-      >
-        <PhoneMark />
-      </a>
-      <a
-        className={styles.link}
         href={`mailto:${profile.email}`}
         title={profile.email}
         aria-label={`Email ${profile.email}`}
       >
         <GmailMark />
+      </a>
+      <a
+        className={styles.link}
+        href={`tel:${profile.phoneHref}`}
+        title={profile.phoneLabel}
+        aria-label={`Call ${profile.phoneLabel}`}
+      >
+        <PhoneMark />
       </a>
     </p>
   );
