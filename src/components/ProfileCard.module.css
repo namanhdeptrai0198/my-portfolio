@@ -15,19 +15,20 @@
   color: var(--color-accent-700);
 }
 
+/* Two groups, one at each end. The distance between them is the whole point:
+   set close together the flag would read as a fifth mark rather than as the
+   answer to a different question. `space-between` only ever has these two
+   children to spread — the marks inside ContactLinks keep their own spacing. */
 .contact {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--space-3);
   margin-bottom: var(--space-4);
 }
 
-/* The flag, pushed to the far end so the line reads contacts-then-country
-   across the card's full width. `margin-left: auto` rather than
-   `justify-content: space-between` — that would spread the marks apart too. */
-.contact > :last-child {
+.contact > :first-child {
   flex: none;
-  margin-left: auto;
 }
 
 /* Stacked only — hidden in the two-column layout, where the gap between the

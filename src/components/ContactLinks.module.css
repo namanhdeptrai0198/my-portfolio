@@ -9,10 +9,11 @@
   gap: 0;
   /* Cancels the links' padding at every edge, so the tap targets are invisible
      to the layout: the row measures 26px tall like the marks it holds, and its
-     visible left edge sits on the text column rather than indented under the
-     name above it. Without this the padding would silently add 18px to the
-     block's height and push everything below it down. */
-  margin: -9px 0 -9px -9px;
+     visible *right* edge — this row sits at the right end of its line — lands
+     on the card's text column rather than 9px short of it. Without this the
+     padding would silently add 18px to the block's height and push everything
+     below it down. */
+  margin: -9px -9px -9px 0;
 }
 
 /* The marks carry their own colour, so there is no icon-plus-label pair to keep

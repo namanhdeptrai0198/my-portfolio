@@ -24,13 +24,18 @@ export function ProfileCard() {
 
       <p className={styles.role}>{profile.role}</p>
 
-      {/* One row now: the ways to reach him, then where he is at the far end of
-          it. The flag is not decoration — it is the only thing left saying
+      {/* Where he is, then how to reach him, at opposite ends of one line.
+          The flag leads because it belongs to the two lines above it — name,
+          role, country share a left edge and read as one column of facts about
+          him, while everything that can be clicked is gathered at the other
+          end. It is also the only thing in this row that is not a link, and
+          sitting among four that are, it invited a tap that does nothing.
+          It is not decoration either: it is the only thing left saying
           "Vietnam", which is why `VietnamFlag` carries that sentence as its
           accessible name. */}
       <div className={styles.contact}>
-        <ContactLinks />
         <VietnamFlag size={FLAG_SIZE} label={profile.location} />
+        <ContactLinks />
       </div>
 
       {/* Only earns its keep in the stacked layout, where it separates this
