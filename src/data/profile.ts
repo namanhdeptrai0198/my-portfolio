@@ -11,6 +11,9 @@ export type Profile = {
   siteDescription: string;
   /** Wide cover still. `null` draws the blueprint placeholder instead. */
   coverImage: string | null;
+  /** Full profile URLs. `null` leaves the mark off the contact row entirely. */
+  facebook: string | null;
+  instagram: string | null;
 };
 
 /**
@@ -36,4 +39,7 @@ export const profile: Profile = {
    * 9MB and nothing on the page renders wider than 1280.
    */
   coverImage: "/images/cover.jpg",
+
+  facebook: "https://www.facebook.com/namanh0198",
+  instagram: "https://www.instagram.com/makeamove.na/",
 };

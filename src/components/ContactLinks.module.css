@@ -1,0 +1,38 @@
+/* No margin of its own. This sits inside a centred flex row next to the flag,
+   and `align-items: center` centres margin boxes, not content — a bottom margin
+   here lifted the marks half its height above the flag beside them. The space
+   under the row belongs to the row's parent. */
+.row {
+  display: flex;
+  align-items: center;
+  /* The marks are spaced by the links' own padding, not by a gap — see below. */
+  gap: 0;
+  /* Cancels the links' padding at every edge, so the tap targets are invisible
+     to the layout: the row measures 26px tall like the marks it holds, and its
+     visible left edge sits on the text column rather than indented under the
+     name above it. Without this the padding would silently add 18px to the
+     block's height and push everything below it down. */
+  margin: -9px 0 -9px -9px;
+}
+
+/* The marks carry their own colour, so there is no icon-plus-label pair to keep
+   together any more and nothing here inherits the accent.
+   The padding is the tap target, not decoration: a 26px mark leaves a 26px
+   target, and these four are the page's primary actions on exactly the device
+   where a thumb is the pointer. 9px each side brings it to the 44px both mobile
+   platforms ask for, without changing the size of anything visible. */
+.link {
+  display: inline-flex;
+  padding: 9px;
+  border-radius: var(--radius-md);
+  transition: transform 120ms ease, opacity 120ms ease;
+}
+
+.link:hover {
+  transform: translateY(-1px);
+  opacity: 0.85;
+}
+
+.link:focus-visible {
+  outline-offset: 3px;
+}

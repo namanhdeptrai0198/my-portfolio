@@ -14,7 +14,14 @@ type Props = {
  *
  * Geometry follows the flag's own spec — the star's points touch a circle one
  * fifth of the flag's height. The hairline is not part of the flag; without it
- * a small red rectangle on a light page reads as a colour swatch.
+ * a red rectangle on a light page reads as a colour swatch.
+ *
+ * The corner radius is not part of the flag either. It is here because this
+ * sits at the end of a row of contact marks, one of which is a rounded square
+ * and two of which are discs: a bare right angle was the only hard corner in
+ * the line and read as a different kind of object. `non-scaling-stroke` keeps
+ * the border a true hairline as the flag grows with them, rather than
+ * thickening in proportion.
  */
 export function VietnamFlag({ size = 15, label }: Props) {
   return (
@@ -26,7 +33,7 @@ export function VietnamFlag({ size = 15, label }: Props) {
       role="img"
       aria-label={label}
     >
-      <rect width="30" height="20" fill="#da251d" />
+      <rect width="30" height="20" rx="1.6" fill="#da251d" />
       <polygon
         fill="#ff0"
         points="15,6 15.9,8.76 18.8,8.76 16.45,10.47 17.35,13.24 15,11.53 12.65,13.24 13.55,10.47 11.2,8.76 14.1,8.76"
@@ -36,9 +43,11 @@ export function VietnamFlag({ size = 15, label }: Props) {
         y="0.5"
         width="29"
         height="19"
+        rx="1.3"
         fill="none"
         stroke="var(--color-divider)"
         strokeWidth="1"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );

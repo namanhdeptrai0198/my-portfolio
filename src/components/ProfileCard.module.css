@@ -15,41 +15,32 @@
   color: var(--color-accent-700);
 }
 
-.contactRow {
+.contact {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin: 0 0 6px;
-  font-size: 14px;
-}
-
-.contactRow svg {
-  flex: none;
-}
-
-.contactRow a {
-  color: var(--color-accent-700);
-}
-
-.contactRow a:hover {
-  text-decoration: underline;
-}
-
-.lastRow {
+  gap: var(--space-3);
   margin-bottom: var(--space-4);
 }
 
-/* The flag, which is always this row's last child: pushed to the far end so the
-   line reads phone-number-then-country across the card's full width.
-   `margin-left: auto` rather than `justify-content: space-between` on the row —
-   that spreads every child, and it would have prised the phone icon away from
-   the number it belongs to. */
-.lastRow > :last-child {
+/* The flag, pushed to the far end so the line reads contacts-then-country
+   across the card's full width. `margin-left: auto` rather than
+   `justify-content: space-between` — that would spread the marks apart too. */
+.contact > :last-child {
+  flex: none;
   margin-left: auto;
 }
 
+/* Stacked only — hidden in the two-column layout, where the gap between the
+   columns does this job.
+   The rhythm this sets is the hierarchy: 4px holds the role under the name as
+   one unit, 10px steps from that unit to the contacts, and this 20px on both
+   sides of the rule is the larger step that says the identity block has ended
+   and the reel has begun. It was var(--space-8) above and nothing like equal
+   below, which read as the block floating rather than closing.
+   The top margin collapses with the contact row's own — max() wins, so this
+   number alone decides the space above. */
 .rule {
-  margin: var(--space-8) 0 var(--space-4);
+  margin: var(--space-6) 0;
 }
 
 /* Everything that changes when this becomes the sticky left column lives in
