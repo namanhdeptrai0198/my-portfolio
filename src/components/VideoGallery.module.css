@@ -63,10 +63,26 @@
   color: var(--color-neutral-700);
 }
 
-@media (max-width: 480px) {
+/* One column, for two unrelated reasons that happen to want the same rule.
+ *
+ * The second half is the old one: two 280px tracks cannot fit a 375px screen,
+ * and auto-fit would rather overflow than drop below its minimum, so anything
+ * this narrow is pinned.
+ *
+ * The first half is the layout ladder. app/page.module.css opens the sticky
+ * identity column at 700px, and left to itself auto-fit would find room for a
+ * second track at 622 — so a window widening from 600 to 700 went one column,
+ * two columns, then back to one beside the identity card. Pinning the band
+ * makes 700px the only width below the desktop layout where anything changes:
+ * one column, then the identity column arrives and takes the space the second
+ * one would have used.
+ *
+ * `min-height` because it has to agree with the query that opens that layout.
+ * A phone held sideways is 852x393 — too short for the identity column, so it
+ * stays stacked, and pinning it to one column would hand it a 620px card whose
+ * thumbnail is taller than the screen. It keeps the two-up grid instead. */
+@media (max-width: 699px) and (min-height: 600px), (max-width: 480px) {
   .grid {
-    /* Two 280px tracks cannot fit a 375px screen, and auto-fit would rather
-       overflow than drop below its minimum — pin it to one column instead. */
     grid-template-columns: 1fr;
   }
 }

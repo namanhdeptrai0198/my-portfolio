@@ -7,14 +7,13 @@
    CSS-module injection order. */
 @import "../styles/industry.css";
 
-/* The handoff's "blueprint frame" pass (industry.css line 285) squares off
-   every component and hangs registration marks outside it. This build drops
-   the marks, so the square corners go with them and the system's own radius
-   tokens — 4px on components, 7px on the dialog — come back into effect. */
+/* The handoff's "blueprint frame" pass — the closing block of industry.css —
+   squares off every component and hangs registration marks outside it. This
+   build drops the marks, so the square corners go with them and the system's
+   own radius tokens — 4px on components, 7px on the dialog — come back into
+   effect. */
 .card,
 .btn,
-.input,
-.tag,
 .seg {
   border-radius: var(--radius-md);
 }
@@ -36,14 +35,12 @@
    hairline, so nothing says which is nearer. This build gives them real
    surfaces and an elevation order instead — see --color-ground/--color-raised
    below for why the system's own bg/surface pair could not do the job.
-   .seg, .input and the secondary button come along because a transparent
-   control on the darker ground reads as text rather than as something to
-   operate — and the thinner divider below leaves them less edge than they
-   had. */
+   .seg and the secondary button come along because a transparent control on
+   the darker ground reads as text rather than as something to operate — and
+   the thinner divider below leaves them less edge than they had. */
 .card,
 .dialog,
 .seg,
-.input,
 .btn-secondary {
   background: var(--color-raised);
 }
@@ -80,10 +77,10 @@
      This pair runs the right way. The ground is the ramp's own neutral-200, so
      it stays in the system; the raised plane is white, ~5% of lightness above
      it, which with the shadows below is enough to read at a glance.
-     --color-bg is deliberately left where it is: the system uses it as a
-     *reversed text* colour in three places — .btn-primary's label, .duration on
-     VideoCard, and the checked radio's inset ring — and darkening it would cost
-     all three contrast to buy nothing here. */
+     --color-bg is deliberately left where it is: it is the *reversed* colour
+     in three places — the checked .seg-opt's label, .duration on VideoCard, and
+     PlayMark's triangle and ring — and darkening it would cost all three
+     contrast to buy nothing here. */
   --color-ground: var(--color-neutral-200);
   --color-raised: #ffffff;
 
@@ -110,6 +107,15 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+}
+
+/* Two places move the page under the visitor — a card sending its video up to
+   the spotlight, and turning to a reel page whose first row is above the fold.
+   Both used to ask JavaScript to animate it and to check the motion preference
+   first; the platform does both, and `scroll-margin-top` on the targets is what
+   keeps their own top margin in frame. */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -189,5 +195,11 @@ a {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* The pair to the `scroll-behavior: smooth` above. A visitor who has asked for
+     less motion gets the same jump to the same place, instantly. */
+  html {
+    scroll-behavior: auto;
   }
 }

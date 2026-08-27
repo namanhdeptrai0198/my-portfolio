@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { useThumbnailSrc } from "@/lib/useThumbnailSrc";
-import { orientationOf, type Video } from "@/lib/videos";
+import type { Video } from "@/data/videos";
+import { orientationOf } from "@/lib/videos";
 import { PlayMark } from "./PlayMark";
 import { useSpotlight } from "./PlaybackProvider";
 import { VideoEmbed } from "./VideoEmbed";
@@ -120,11 +121,11 @@ function Ambient({ video }: { video: Video }) {
 }
 
 /**
- * The strip above the two-column layout, and the one place video plays on a
- * wide screen — picking anything in the reel sends it up here rather than
- * opening a dialog over it. Hidden below 900px entirely (see
- * Spotlight.module.css), where the reel falls back to the dialog and the
- * identity block carries the cover photo instead.
+ * The strip at the top of the desktop layout, and the one place video plays
+ * there — picking anything in the reel sends it up here rather than opening a
+ * dialog over it. Absent everywhere else (see Spotlight.module.css), including
+ * on a tablet upright, which keeps the two columns but not this: the reel falls
+ * back to the dialog and the identity block carries the cover photo instead.
  *
  * Until the visitor picks something this is a still of `spotlightId`, and the
  * image is deliberately not `priority`: while the section is `display: none`

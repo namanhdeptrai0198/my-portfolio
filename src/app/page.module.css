@@ -4,18 +4,26 @@
 }
 
 /*
- * Below 900px everything stacks and reads top to bottom, exactly as before.
+ * Below this everything stacks and reads top to bottom, exactly as before.
  *
  * Above it the identity block becomes a fixed left column that the reel scrolls
  * past. Every rule that switch depends on lives in this block — including the
  * ones that act on ProfileCard — so the breakpoint is written once and the two
  * halves of the layout cannot drift apart.
  *
+ * Both halves of the query are load-bearing and lib/breakpoints.ts owns the
+ * reasoning — 700px is where a card first comes out wider than the 300px column
+ * beside it, and the height floor keeps a phone held sideways, wide enough on
+ * paper but 393px tall, out of a layout whose identity column would eat a third
+ * of it. Keep this query character-for-character identical to WIDE there.
+ * Spotlight.module.css deliberately asks for more than this — the strip is
+ * desktop-only, while these two columns are not.
+ *
  * The horizontal gutter moves up to `.body` so both columns share one; setting
  * `--page-pad: 0` is how the children are told to stop adding their own, since
  * every one of them takes its inline padding from that token.
  */
-@media (min-width: 900px) {
+@media (min-width: 700px) and (min-height: 600px) {
   .body {
     --page-pad: 0;
 
@@ -46,7 +54,7 @@
     /* The middle of the three planes. This is the one place on the page where
        the elevation is literally true: the column holds still while the reel
        travels past it, so it is in front of the reel and should look it. Only
-       in this layout — below 900px it is a header in the flow, in front of
+       in this layout — below the switch it is a header in the flow, in front of
        nothing. */
     background: var(--color-raised);
     box-shadow: var(--shadow-md);
@@ -70,7 +78,7 @@
   }
 
   /* CoverBanner is always the first child — square it off into a portrait
-     rather than the wide crop it uses full-bleed below 900px. */
+     rather than the wide crop it uses full-bleed below the switch. */
   .identity > :first-child {
     height: auto;
     aspect-ratio: 1;
@@ -79,10 +87,10 @@
   /* He is shot in profile looking off the left edge of the photograph. In this
      layout that points the eye out of the page, away from the name under him
      and the reel beside him; mirrored, he looks into both.
-     Only here. Full-bleed below 900px the banner is the whole width and there
+     Only here. Full-bleed below the switch the banner is the whole width and there
      is nothing to the side to look towards, so that crop keeps the frame as
      it was shot — which is also why this rule lives in this file rather than
-     in CoverBanner.module.css, with every other rule the 900px switch owns.
+     in CoverBanner.module.css, with every other rule the switch owns.
      No crop moves: `object-position` is horizontally centred, so the flip only
      swaps which side of the frame each thing sits on, and nothing in shot
      reads as text — the practicals are bare panels. */
@@ -107,7 +115,7 @@
      control over the grid were a third band of chrome before any work was
      visible. The reel starts at the first frame instead.
      The cost is real: with the row gone the filter cannot be used at this
-     width at all, only below 900px. Deleting this one rule brings both back —
+     width at all, only below the switch. Deleting this one rule brings both back —
      nothing else depends on it. */
   .reel [data-reel-header] {
     display: none;

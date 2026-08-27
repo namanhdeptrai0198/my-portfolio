@@ -3,13 +3,13 @@ import { PlaybackProvider } from "@/components/PlaybackProvider";
 import { ProfileCard } from "@/components/ProfileCard";
 import { Spotlight } from "@/components/Spotlight";
 import { VideoGallery } from "@/components/VideoGallery";
-import { getFilters, getSpotlight, getVideos } from "@/lib/videos";
+import { spotlightId, videos } from "@/data/videos";
+import { FILTERS } from "@/lib/videos";
 import styles from "./page.module.css";
 
 export default function Page() {
-  const videos = getVideos();
-  const filters = getFilters();
-  const spotlight = getSpotlight();
+  // A typo in `spotlightId` drops the strip rather than breaking the page.
+  const spotlight = videos.find((v) => v.id === spotlightId) ?? null;
 
   return (
     <main className={styles.page}>
@@ -23,7 +23,7 @@ export default function Page() {
             <ProfileCard />
           </div>
           <div className={styles.reel}>
-            <VideoGallery videos={videos} filters={filters} />
+            <VideoGallery videos={videos} filters={FILTERS} />
           </div>
         </div>
       </PlaybackProvider>

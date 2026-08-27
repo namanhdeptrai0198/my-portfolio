@@ -2,19 +2,6 @@
   padding: var(--space-4) var(--page-pad) 0;
 }
 
-.avatar {
-  position: relative;
-  width: 96px;
-  height: 96px;
-  margin-bottom: var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--color-neutral-800);
-}
-
-.avatarImage {
-  object-fit: cover;
-}
-
 .name {
   margin: 0 0 4px;
 }

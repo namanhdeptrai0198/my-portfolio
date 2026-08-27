@@ -3,9 +3,15 @@ import { profile } from "@/data/profile";
 import styles from "./CoverBanner.module.css";
 
 /**
- * Full-bleed below 900px, where it spans the whole stacked layout. At 900px
- * and up, page.module.css squares it into a portrait at the top of the
- * sticky identity column instead — see `.identity > :first-child` there.
+ * Full-bleed in the stacked layout, where it spans the whole width. Once
+ * lib/breakpoints.ts's query is met, page.module.css squares it into a portrait
+ * at the top of the sticky identity column instead — see
+ * `.identity > :first-child` there.
+ *
+ * The `sizes` stops say the same thing twice because that query has two halves:
+ * a window under 700px is stacked, and so is a short one at any width — a phone
+ * on its side is 852px wide and still gets the full-bleed banner. This image is
+ * `priority`, so an under-estimate here is a soft LCP.
  */
 export function CoverBanner() {
   return (
@@ -18,7 +24,7 @@ export function CoverBanner() {
           alt=""
           fill
           priority
-          sizes="(max-width: 899px) 100vw, 298px"
+          sizes="(max-width: 699px) 100vw, (max-height: 599px) 100vw, 298px"
           className={styles.coverImage}
         />
       ) : (

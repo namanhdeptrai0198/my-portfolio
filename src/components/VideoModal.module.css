@@ -1,5 +1,35 @@
+/* The <dialog> element itself, undone back to a plain full-viewport stage: the
+   UA gives it a fit-content box with a border, a white background and centring
+   margins, none of which suit a scrim. No z-index — the top layer is already
+   above every stacking context on the page.
+   Filling the viewport is what makes the scrim clickable: ::backdrop is a
+   pseudo-element and takes no events, so the dialog box has to be the thing
+   under the pointer everywhere the inner card is not. */
 .backdrop {
-  z-index: 50;
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: var(--space-4);
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+/* Only when open — a bare `display: grid` would override the UA rule that keeps
+   a closed dialog hidden. */
+.backdrop[open] {
+  display: grid;
+  place-items: center;
+}
+
+/* ::backdrop inherits from the dialog that originated it, so the token
+   resolves here — that was not always true of this pseudo-element, and a
+   browser old enough to disagree renders no scrim rather than a wrong one. */
+.backdrop::backdrop {
+  background: color-mix(in srgb, var(--color-neutral-900) 50%, transparent);
 }
 
 .dialog {

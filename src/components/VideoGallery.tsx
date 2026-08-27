@@ -3,13 +3,12 @@
 import { useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { WIDE } from "@/lib/breakpoints";
-import { scrollToStart } from "@/lib/scrollToStart";
 import { useMediaQuery } from "@/lib/useMediaQuery";
+import type { Video } from "@/data/videos";
 import {
   filterByOrientation,
   type FilterKey,
   type FilterOption,
-  type Video,
 } from "@/lib/videos";
 import { useSelectVideo } from "./PlaybackProvider";
 import { ReelFilter } from "./ReelFilter";
@@ -21,11 +20,11 @@ const INITIAL_COUNT = 6;
 const LOAD_MORE_COUNT = 4;
 
 /**
- * A page of the reel above 900px. Six, because the grid there is three columns
- * at the page's full 1280px and two from 900px to 1228px — six is the smaller
- * number that divides both, so the last row is never left ragged at one width to
- * suit the other. It also comes to roughly one screenful, which is the whole
- * point of turning a page instead of scrolling.
+ * A page of the reel in the two-column layout. Six, because the grid there runs
+ * one column from 700px, two from 942px and three at the page's full 1280px —
+ * six is the smallest number all three divide, so the last row is never left
+ * ragged at one width to suit another. It also comes to roughly one screenful,
+ * which is the whole point of turning a page instead of scrolling.
  */
 const PAGE_SIZE = 6;
 
@@ -37,14 +36,14 @@ type Props = {
 /**
  * The reel: an aspect-ratio filter, and one of two ways through the list.
  *
- * Below 900px it grows downwards on "Load more". Above it the same list is
- * paged, because there the reel is a column beside a fixed identity card rather
- * than the whole page, and a column that only ever gets longer pushes its own
- * end further away with every click.
+ * Stacked, it grows downwards on "Load more". In the two-column layout the same
+ * list is paged instead, because there the reel is a column beside a fixed
+ * identity card rather than the whole page, and a column that only ever gets
+ * longer pushes its own end further away with every click.
  *
  * What a click on a card does is not decided here — PlaybackProvider owns that,
- * because above 900px the answer is "play it in the spotlight at the top of the
- * page" and below it "open the dialog".
+ * because in the two-column layout the answer is "play it in the spotlight at
+ * the top of the page" and stacked it is "open the dialog".
  */
 export function VideoGallery({ videos, filters }: Props) {
   const select = useSelectVideo();
@@ -55,8 +54,8 @@ export function VideoGallery({ videos, filters }: Props) {
   /**
    * One number for both layouts: how many times the visitor has asked to go
    * further into the reel. Each layout reads it its own way — accumulating
-   * below 900px, a window above it — so resizing across the breakpoint lands
-   * you at the same depth in the list rather than back at the top.
+   * when stacked, a window when two-column — so resizing across the breakpoint
+   * lands you at the same depth in the list rather than back at the top.
    */
   const [page, setPage] = useState(1);
 
@@ -86,15 +85,15 @@ export function VideoGallery({ videos, filters }: Props) {
     setPage(next);
     // The row that just arrived is above the fold if the visitor had scrolled
     // to reach these buttons.
-    scrollToStart(reelRef.current);
+    reelRef.current?.scrollIntoView({ block: "start" });
   }
 
   return (
     <>
       <section id="reel" ref={reelRef} className={styles.section}>
-        {/* `data-reel-header` is the handle page.module.css hides this by above
-            900px, rather than a class this file would style: every rule the
-            900px switch owns stays in that one file. */}
+        {/* `data-reel-header` is the handle page.module.css hides this by in
+            the two-column layout, rather than a class this file would style:
+            every rule that switch owns stays in that one file. */}
         <div data-reel-header className={styles.header}>
           <h2 className={styles.heading}>
             {matching.length} {matching.length === 1 ? "Video" : "Videos"}

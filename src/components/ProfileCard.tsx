@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Mail, Phone } from "lucide-react";
 import { profile } from "@/data/profile";
 import { VietnamFlag } from "./VietnamFlag";
@@ -24,22 +23,6 @@ const FLAG_SIZE = ICON.size * 2;
 export function ProfileCard() {
   return (
     <header className={styles.card}>
-      {/* No headshot yet means no avatar at all — an empty block, or one
-          holding initials, is a placeholder standing where a face should be.
-          Set profile.avatarImage and the whole row comes back. */}
-      {profile.avatarImage ? (
-        <div className={`${styles.avatar} duotone`}>
-          <Image
-            src={profile.avatarImage}
-            alt={profile.name}
-            fill
-            priority
-            sizes="96px"
-            className={styles.avatarImage}
-          />
-        </div>
-      ) : null}
-
       <h1 className={styles.name}>{profile.name}</h1>
 
       <p className={styles.role}>{profile.role}</p>

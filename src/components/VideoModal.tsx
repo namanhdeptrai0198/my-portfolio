@@ -2,12 +2,10 @@
 
 import { useEffect, useId, useRef } from "react";
 import { X } from "lucide-react";
-import { orientationOf, type Video } from "@/lib/videos";
+import type { Video } from "@/data/videos";
+import { orientationOf } from "@/lib/videos";
 import { VideoEmbed } from "./VideoEmbed";
 import styles from "./VideoModal.module.css";
-
-const FOCUSABLE =
-  'a[href], button:not([disabled]), iframe, input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 type Props = {
   video: Video;
@@ -19,22 +17,36 @@ type Props = {
  * ~700KB of player it pulls in — is never created for a reel the visitor has
  * not asked to watch.
  *
- * The mock only closed on a backdrop click; a real dialog also has to handle
- * Escape, keep Tab inside itself, stop the page behind it from scrolling and
- * hand focus back to the card that opened it.
+ * A native <dialog> opened with showModal(), which is what supplies the four
+ * behaviours a real dialog needs: Escape to dismiss, Tab kept inside, the page
+ * behind made inert, and focus handed back to the card that opened it. All four
+ * used to be hand-written here.
+ *
+ * The two things the element does not do are still done below: the page behind
+ * a modal dialog can still be scrolled, and `autoFocus` is what puts the caret
+ * on the close button rather than on the YouTube iframe.
+ *
+ * Every way out goes through `dialog.close()` — Escape natively, the button and
+ * the scrim by calling it — and the `close` event is the single place that tells
+ * React. Closing any other way would leave `modal` set with the dialog gone: the
+ * iframe would keep playing audio from a box nobody can see. It also means the
+ * element is always closed properly rather than yanked out of the DOM mid-open,
+ * which is what makes the browser hand focus back to the card.
  */
 export function VideoModal({ video, onClose }: Props) {
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const isPortrait = orientationOf(video) === "portrait";
 
-  // Move focus in on open, and put it back on the opening card on close.
+  // Nothing puts a <dialog> in the top layer but this call — rendering it with
+  // an `open` attribute instead gives a non-modal dialog and none of the four
+  // behaviours above.
   useEffect(() => {
-    const opener = document.activeElement as HTMLElement | null;
-    closeRef.current?.focus();
-    return () => opener?.focus?.();
-  }, []);
+    const dialog = dialogRef.current;
+    dialog?.showModal();
+    dialog?.addEventListener("close", onClose);
+    return () => dialog?.removeEventListener("close", onClose);
+  }, [onClose]);
 
   // Freeze the page behind the scrim.
   useEffect(() => {
@@ -45,54 +57,20 @@ export function VideoModal({ video, onClose }: Props) {
     };
   }, []);
 
-  // Escape closes; Tab cycles within the dialog.
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-        return;
-      }
-      if (event.key !== "Tab") return;
-
-      const dialog = dialogRef.current;
-      if (!dialog) return;
-      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE));
-      if (focusable.length === 0) return;
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      const active = document.activeElement;
-
-      if (event.shiftKey && (active === first || !dialog.contains(active))) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && active === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onClose]);
-
   return (
-    <div
-      className={`dialog-backdrop ${styles.backdrop}`}
-      role="presentation"
-      // Only a click on the scrim itself closes — a click that lands on the
-      // dialog bubbles up here with a different target and is ignored.
+    <dialog
+      ref={dialogRef}
+      className={styles.backdrop}
+      aria-labelledby={titleId}
+      // The scrim is ::backdrop, which is not an element and cannot be clicked.
+      // A click that lands anywhere the inner box does not cover reports the
+      // dialog itself as its target, and that is the scrim.
       onClick={(event) => {
-        if (event.target === event.currentTarget) onClose();
+        if (event.target === event.currentTarget) event.currentTarget.close();
       }}
     >
       <div
-        ref={dialogRef}
         className={`dialog ${styles.dialog} ${isPortrait ? styles.dialogPortrait : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
       >
         <div className={styles.head}>
           <div className={styles.heading}>
@@ -105,9 +83,9 @@ export function VideoModal({ video, onClose }: Props) {
             <div className={`card-meta ${styles.role}`}>{video.role}</div>
           </div>
           <button
-            ref={closeRef}
+            autoFocus
             type="button"
-            onClick={onClose}
+            onClick={() => dialogRef.current?.close()}
             className={`btn btn-icon btn-secondary ${styles.close}`}
             aria-label="Close video"
           >
@@ -126,6 +104,6 @@ export function VideoModal({ video, onClose }: Props) {
           )}
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

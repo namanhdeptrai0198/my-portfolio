@@ -30,25 +30,3 @@ export function embedUrl(youtubeId: string): string {
   });
   return `${EMBED_HOST}/embed/${youtubeId}?${params}`;
 }
-
-/**
- * Accepts anything you can copy out of the YouTube address bar or Share panel
- * and returns the bare id. Handy when filling in `src/data/videos.ts`.
- */
-export function parseYouTubeId(input: string): string | null {
-  const trimmed = input.trim();
-  if (/^[\w-]{11}$/.test(trimmed)) return trimmed;
-
-  try {
-    const url = new URL(trimmed);
-    const fromQuery = url.searchParams.get("v");
-    if (fromQuery && /^[\w-]{11}$/.test(fromQuery)) return fromQuery;
-
-    // youtu.be/<id>, /embed/<id>, /shorts/<id>, /live/<id>
-    const last = url.pathname.split("/").filter(Boolean).pop();
-    if (last && /^[\w-]{11}$/.test(last)) return last;
-  } catch {
-    // not a URL — fall through
-  }
-  return null;
-}

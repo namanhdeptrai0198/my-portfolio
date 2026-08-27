@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { Video } from "@/lib/videos";
+import type { Video } from "@/data/videos";
 import { useThumbnailSrc } from "@/lib/useThumbnailSrc";
 import { PlayMark } from "./PlayMark";
 import styles from "./VideoCard.module.css";
@@ -29,15 +29,27 @@ export function VideoCard({ video, onOpen }: Props) {
           /* These stops mirror layout maths kept in two other files — the
              auto-fit/minmax(280px) grid in VideoGallery.module.css, and the
              300px sticky column that page.module.css inserts beside the reel
-             above 900px. A card is never the fraction of the viewport a plain
-             two-column layout would suggest: the grid adds columns instead of
-             widening them, and above 900px the reel starts 361px in. Change
-             either file and these have to move with it. */
+             once lib/breakpoints.ts's query is met. A card is never the
+             fraction of the viewport a plain two-column layout would suggest:
+             the grid adds columns instead of widening them, and beside the
+             sticky column the reel starts 361px in. Change either file and
+             these have to move with it.
+             One number has to cover both layouts at each width, because the
+             same 800px window is a sticky column plus one wide card on a tablet
+             and a plain two-up grid on a phone held sideways. Each stop takes
+             whichever of the two is larger: an over-estimate costs a slightly
+             heavier file, an under-estimate costs a visibly soft thumbnail.
+             The first stop is the one place that is worth splitting rather than
+             rounding up. Between 622 and 699 a tall window is pinned to one
+             card and a short one still runs two, and the gap is a whole rung of
+             the srcset ladder — 100vw on a 667px phone buys the 1920w tile for
+             a 303px box. `sizes` takes any media condition, not only width, so
+             it can just say which of the two it is. */
           <Image
             src={thumbSrc}
             alt=""
             fill
-            sizes="(max-width: 614px) 100vw, (max-width: 899px) 48vw, (max-width: 934px) 62vw, (max-width: 1228px) 36vw, 300px"
+            sizes="(min-width: 622px) and (max-width: 699px) and (max-height: 599px) 48vw, (max-width: 699px) 100vw, (max-width: 941px) 62vw, (max-width: 1241px) 36vw, 300px"
             className={styles.thumbImage}
             onError={onError}
           />

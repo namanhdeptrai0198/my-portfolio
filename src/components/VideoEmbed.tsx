@@ -1,4 +1,4 @@
-import type { Video } from "@/lib/videos";
+import type { Video } from "@/data/videos";
 import { embedUrl } from "@/lib/youtube";
 import styles from "./VideoEmbed.module.css";
 

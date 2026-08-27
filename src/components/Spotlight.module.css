@@ -1,12 +1,16 @@
-/* Only ever shown in the two-column layout — page.module.css turns that on
-   at 900px, so this mirrors that threshold exactly. Below it the identity
-   block already carries the cover photo (see CoverBanner + page.module.css),
-   so this would be a second, redundant hero. */
+/* Shown on a desktop and nowhere else — this query is lib/breakpoints.ts's
+   HAS_SPOTLIGHT, which is the two-column layout's own query plus `pointer:
+   fine`, and PlaybackProvider asks the same one in JavaScript. Keep the three
+   identical.
+   The strip is not merely hidden where it is absent, it is *replaced*: the
+   identity block carries the cover photo there (see CoverBanner +
+   page.module.css) and a picked video opens in the dialog instead, so nothing
+   below this is a page missing its hero. */
 .section {
   display: none;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 700px) and (min-height: 600px) and (pointer: fine) {
   .section {
     display: block;
     /* Inset by the same gutter `.body` uses, so this strip's edges line up
