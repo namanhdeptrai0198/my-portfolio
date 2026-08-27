@@ -1,57 +1,69 @@
-/* No margin of its own. This sits inside a centred flex row next to the flag,
-   and `align-items: center` centres margin boxes, not content — a bottom margin
-   here lifted the marks half its height above the flag beside them. The space
-   under the row belongs to the row's parent. */
+/* One object, not four.
+ *
+ * These were four filled boxes, each with its own drop shadow, on a card that
+ * is itself a raised, shadowed plane — elevation stacked on elevation, four
+ * separate things to look at where there is only one thing to say. Gathered
+ * into a single outlined pill they read as one control, which is both calmer
+ * and a truer description: they are one row of ways to reach the same person.
+ *
+ * The pill still does the job the chips were added for. It is what separates
+ * these from the flag at the other end of the row — the flag stands bare
+ * outside it and is plainly not part of it, which is a cleaner distinction than
+ * four boxes against one bare mark ever was.
+ *
+ * A hairline instead of a shadow, and a full 999px cap instead of the system's
+ * 4px corner: nothing on this card should look like it is floating above the
+ * card, and at this size a rounded rectangle reads as an app icon.
+ *
+ * The fill is the raised white and the border a shade heavier than
+ * --color-divider, because the pill has to hold on both grounds. Stacked, it is
+ * white on the page's grey and the fill alone draws it. In the sticky column it
+ * is white on white, and the ring is the only thing left — at the divider's 10%
+ * it had all but vanished there.
+ *
+ * No margin of its own. This sits inside a centred flex row next to the flag,
+ * and `align-items: center` centres margin boxes, not content — a bottom margin
+ * here lifted the marks half its height above the flag beside them. The space
+ * under the row belongs to the row's parent.
+ */
 .row {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
   margin: 0;
+  border: 1px solid color-mix(in srgb, var(--color-text) 16%, transparent);
+  border-radius: 999px;
+  background: var(--color-raised);
 }
 
-/* The chip is what says these four can be pressed and the flag beside them
-   cannot — bare marks on the card gave no such signal, and after the flag moved
-   to the head of the line there was nothing left to tell the two apart.
-   It also gives the row one silhouette. The marks do not share one: Gmail is a
-   bare envelope with no container of its own, while the other three bring their
-   own disc or rounded square. A shadow alone could not have fixed either
-   problem — `box-shadow` follows the element's box, so it would have drawn a
-   rectangle around the floating M.
-   The background is an ink wash rather than a colour, because this card sits on
-   two different grounds: the white raised column above 700px, and the page's
-   own grey when stacked. A fixed tint would disappear into one of them; a
-   translucent one darkens whatever is behind it. */
+/* 26px mark + 9px on every side is exactly the 44px both mobile platforms ask
+   of a tap target, so the target is the visible thing and there is no
+   pseudo-element stretching past it. The four tile edge to edge: no gap to fall
+   between them, and no overlap to make the boundary ambiguous.
+   The hover circle is 44px inside a pill whose inner height is also 44px, so it
+   meets the top and bottom exactly, and at the ends its radius is the pill's
+   own cap radius — the wash lands on the pill rather than inside it. */
 .link {
   display: inline-flex;
-  position: relative;
-  padding: 7px;
-  border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--color-text) 6%, transparent);
-  box-shadow: var(--shadow-sm);
-  transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease;
+  padding: 9px;
+  border-radius: 50%;
+  transition: background 140ms ease;
 }
 
-/* The tap target, held at the 44px both mobile platforms ask for while the chip
-   stays 40px. Drawn as a pseudo-element rather than as more padding so the
-   target can be larger than the thing it covers without the chips growing into
-   each other — at this gap they come within 2.8px and never overlap. */
-.link::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-}
-
+/* An ink wash rather than a colour: this card sits on two grounds — the white
+   raised column above 700px and the page's grey when stacked — and a fixed tint
+   would disappear into one of them.
+   It tints and nothing more. The lift-on-hover the chips had is the gesture of
+   an app icon; holding still while the ground darkens under the mark is the
+   quieter version of the same signal. */
 .link:hover {
-  transform: translateY(-1px);
-  background: color-mix(in srgb, var(--color-text) 12%, transparent);
-  box-shadow: var(--shadow-md);
+  background: color-mix(in srgb, var(--color-text) 7%, transparent);
 }
 
 .link:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
+  background: color-mix(in srgb, var(--color-text) 13%, transparent);
 }
 
+/* Inside the pill, so the ring does not straddle its hairline. */
 .link:focus-visible {
-  outline-offset: 3px;
+  outline-offset: -3px;
 }

@@ -1,4 +1,5 @@
 import { profile } from "@/data/profile";
+import { AppLink } from "./AppLink";
 import styles from "./ContactLinks.module.css";
 
 /**
@@ -90,18 +91,48 @@ function InstagramMark() {
  * something first. `title` is what buys most of that back — the address and the
  * number are still in the markup, still read aloud by a screen reader through
  * the label, and still shown on hover.
+ *
+ * The order runs from the cheapest thing to ask of a visitor to the most
+ * expensive: two profiles to look through before deciding anything, then the
+ * two that reach him personally, phone last-but-one and mail at the end where
+ * the eye stops. It is also roughly how a client actually arrives — scroll the
+ * work, then make contact.
+ *
+ * `instagram://` takes a bare username, while Facebook's app has no username
+ * form and takes the whole web address instead. Both are derived from the URLs
+ * in `data/profile.ts` so there is still only one place to change them.
  */
 export function ContactLinks() {
+  const instagramUser = profile.instagram
+    ? new URL(profile.instagram).pathname.replaceAll("/", "")
+    : "";
+
   return (
     <p className={styles.row}>
-      <a
-        className={styles.link}
-        href={`mailto:${profile.email}`}
-        title={profile.email}
-        aria-label={`Email ${profile.email}`}
-      >
-        <GmailMark />
-      </a>
+      {profile.instagram ? (
+        <AppLink
+          className={styles.link}
+          href={profile.instagram}
+          appHref={`instagram://user?username=${instagramUser}`}
+          androidPackage="com.instagram.android"
+          title="Instagram"
+          label="Instagram profile"
+        >
+          <InstagramMark />
+        </AppLink>
+      ) : null}
+      {profile.facebook ? (
+        <AppLink
+          className={styles.link}
+          href={profile.facebook}
+          appHref={`fb://facewebmodal/f?href=${encodeURIComponent(profile.facebook)}`}
+          androidPackage="com.facebook.katana"
+          title="Facebook"
+          label="Facebook profile"
+        >
+          <FacebookMark />
+        </AppLink>
+      ) : null}
       <a
         className={styles.link}
         href={`tel:${profile.phoneHref}`}
@@ -110,30 +141,14 @@ export function ContactLinks() {
       >
         <PhoneMark />
       </a>
-      {profile.facebook ? (
-        <a
-          className={styles.link}
-          href={profile.facebook}
-          target="_blank"
-          rel="me noreferrer"
-          title="Facebook"
-          aria-label="Facebook profile"
-        >
-          <FacebookMark />
-        </a>
-      ) : null}
-      {profile.instagram ? (
-        <a
-          className={styles.link}
-          href={profile.instagram}
-          target="_blank"
-          rel="me noreferrer"
-          title="Instagram"
-          aria-label="Instagram profile"
-        >
-          <InstagramMark />
-        </a>
-      ) : null}
+      <a
+        className={styles.link}
+        href={`mailto:${profile.email}`}
+        title={profile.email}
+        aria-label={`Email ${profile.email}`}
+      >
+        <GmailMark />
+      </a>
     </p>
   );
 }
