@@ -5,33 +5,51 @@
 .row {
   display: flex;
   align-items: center;
-  /* The marks are spaced by the links' own padding, not by a gap — see below. */
-  gap: 0;
-  /* Cancels the links' padding at every edge, so the tap targets are invisible
-     to the layout: the row measures 26px tall like the marks it holds, and its
-     visible *right* edge — this row sits at the right end of its line — lands
-     on the card's text column rather than 9px short of it. Without this the
-     padding would silently add 18px to the block's height and push everything
-     below it down. */
-  margin: -9px -9px -9px 0;
+  gap: var(--space-2);
+  margin: 0;
 }
 
-/* The marks carry their own colour, so there is no icon-plus-label pair to keep
-   together any more and nothing here inherits the accent.
-   The padding is the tap target, not decoration: a 26px mark leaves a 26px
-   target, and these four are the page's primary actions on exactly the device
-   where a thumb is the pointer. 9px each side brings it to the 44px both mobile
-   platforms ask for, without changing the size of anything visible. */
+/* The chip is what says these four can be pressed and the flag beside them
+   cannot — bare marks on the card gave no such signal, and after the flag moved
+   to the head of the line there was nothing left to tell the two apart.
+   It also gives the row one silhouette. The marks do not share one: Gmail is a
+   bare envelope with no container of its own, while the other three bring their
+   own disc or rounded square. A shadow alone could not have fixed either
+   problem — `box-shadow` follows the element's box, so it would have drawn a
+   rectangle around the floating M.
+   The background is an ink wash rather than a colour, because this card sits on
+   two different grounds: the white raised column above 700px, and the page's
+   own grey when stacked. A fixed tint would disappear into one of them; a
+   translucent one darkens whatever is behind it. */
 .link {
   display: inline-flex;
-  padding: 9px;
+  position: relative;
+  padding: 7px;
   border-radius: var(--radius-md);
-  transition: transform 120ms ease, opacity 120ms ease;
+  background: color-mix(in srgb, var(--color-text) 6%, transparent);
+  box-shadow: var(--shadow-sm);
+  transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease;
+}
+
+/* The tap target, held at the 44px both mobile platforms ask for while the chip
+   stays 40px. Drawn as a pseudo-element rather than as more padding so the
+   target can be larger than the thing it covers without the chips growing into
+   each other — at this gap they come within 2.8px and never overlap. */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
 }
 
 .link:hover {
   transform: translateY(-1px);
-  opacity: 0.85;
+  background: color-mix(in srgb, var(--color-text) 12%, transparent);
+  box-shadow: var(--shadow-md);
+}
+
+.link:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
 .link:focus-visible {
