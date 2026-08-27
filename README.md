@@ -69,11 +69,14 @@ Nhóm nào chưa có video nào thì tự động không hiện trong bộ lọc
 Mở `src/data/profile.ts`. Đây là **nơi duy nhất** chứa email, số điện thoại,
 tên và dòng vai trò — sửa ở đây là đổi khắp trang.
 
-### 3. Đổi ảnh bìa / video spotlight / ảnh chân dung
+Hai dòng `facebook` và `instagram` nhận link profile đầy đủ. Để `null` thì icon
+tương ứng biến mất khỏi hàng liên hệ, không cần đụng vào giao diện.
+
+### 3. Đổi ảnh bìa / video spotlight
 
 **Ảnh bìa đã có** (`public/images/cover.jpg`). Nó hiện hai kiểu tuỳ màn hình:
-dưới 900px là dải ngang full-bleed, từ 900px trở lên nó được cắt vuông vào
-đầu cột trái. Muốn thay ảnh khác:
+ở bản xếp dọc là dải ngang full-bleed, còn ở layout hai cột nó được cắt vuông
+vào đầu cột identity bên phải. Muốn thay ảnh khác:
 
 1. Thu nhỏ ảnh gốc trước khi chép vào — máy ảnh cho ra file 9MB, trang không
    cần quá 2400px:
@@ -87,22 +90,20 @@ sips -Z 2400 -s formatOptions 82 ~/duong-dan/anh-goc.jpg --out public/images/cov
    phần trên của ảnh. Vì ảnh dùng chung cho cả hai kiểu cắt (ngang và vuông),
    kiểm tra lại cả hai cỡ màn hình sau khi đổi số.
 
-**Video spotlight** (khung lớn phía trên cùng, chỉ hiện từ 900px trở lên): mở
-`src/data/videos.ts`, sửa `spotlightId` thành `id` của video muốn đưa lên đầu.
+**Video spotlight** (khung lớn phía trên cùng, **chỉ hiện trên desktop** — xem
+mục quyết định kỹ thuật bên dưới): mở `src/data/videos.ts`, sửa `spotlightId`
+thành `id` của video muốn đưa lên đầu.
 Video đó vẫn nằm nguyên trong reel bên dưới — spotlight chỉ là một cách hiển
 thị thêm, không phải cắt nó ra khỏi danh sách.
 
-`spotlightId` chỉ quyết định video **mở màn**. Từ 900px trở lên, khách bấm thẻ
-nào trong reel thì video đó lên spotlight và chạy ngay tại đó, không mở popup —
-nên bạn không cần sửa gì để họ xem được cái khác.
+`spotlightId` chỉ quyết định video **mở màn**. Ở đâu có spotlight thì khách bấm
+thẻ nào trong reel, video đó lên spotlight và chạy ngay tại đó, không mở popup —
+nên bạn không cần sửa gì để họ xem được cái khác. Ở đâu không có (tablet và điện
+thoại) thì bấm thẻ vẫn mở popup như cũ.
 
 Chiều cao dải spotlight nằm ở `--band-h` trong
 `src/components/Spotlight.module.css`. Đổi số đó là đổi luôn cả ảnh tĩnh và
 player, vì cả hai đo theo nó — không có chỗ thứ hai phải sửa theo.
-
-**Ảnh chân dung**: chép ảnh vuông (~400×400) vào `public/images/`, rồi mở
-`src/data/profile.ts` sửa `avatarImage: "/images/avatar.jpg"`. Khi còn `null`
-thì khối avatar không hiện.
 
 ---
 
@@ -138,16 +139,17 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
 | Đường dẫn | Việc của nó |
 |---|---|
 | `src/data/videos.ts` | Danh sách dự án — **file bạn sửa nhiều nhất** |
-| `src/data/profile.ts` | Tên, vai trò, email, điện thoại, ảnh |
-| `src/lib/videos.ts` | Cửa duy nhất giữa dữ liệu và giao diện. Sau này chuyển sang CMS thì chỉ sửa file này, không đụng giao diện |
+| `src/data/profile.ts` | Tên, vai trò, email, điện thoại, link mạng xã hội, ảnh bìa |
+| `src/lib/videos.ts` | Suy ra dọc/ngang và lọc reel theo tỉ lệ |
 | `src/lib/youtube.ts` | Suy ra link nhúng và link thumbnail từ id |
+| `src/lib/breakpoints.ts` | Hai mốc layout, viết một lần cho cả CSS lẫn JS đọc chung |
 | `src/styles/industry.css` | Design system gốc — **không sửa**, để còn đồng bộ lại được khi design cập nhật |
 | `src/app/globals.css` | Phần bổ sung của riêng dự án (bề rộng trang, màn hình nhỏ) |
 | `src/components/` | Các thành phần giao diện |
 
 ### Vài quyết định kỹ thuật đáng nhớ
 
-- **Iframe YouTube chỉ được tạo khi bấm mở video**, không nạp sẵn 12 cái —
+- **Iframe YouTube chỉ được tạo khi bấm mở video**, không nạp sẵn 16 cái —
   đây là lý do trang tải nhanh.
 - Nhúng qua `youtube-nocookie.com` nên YouTube không đặt cookie theo dõi
   người xem cho tới khi họ thật sự bấm play.
@@ -159,20 +161,32 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
 - Design system phủ lớp xanh thép lên mọi ảnh, nhưng thumbnail thì **không** —
   màu và ánh sáng chính là thứ khách cần thấy ở một người quay phim, và trên
   điện thoại không có thao tác rê chuột để lộ màu thật.
-- Popup video đóng được bằng Esc, bằng nút X và bằng bấm ra nền; khoá cuộn
-  trang phía sau và trả con trỏ bàn phím về đúng thẻ video đã bấm.
-- Từ 900px trở lên, cột trái (ảnh bìa + thông tin liên hệ) dính lại khi cuộn
-  trang, và video chạy ngay trên "spotlight" phía trên thay vì mở popup —
-  bấm thẻ nào thì trang tự cuộn lên đó. Dưới 900px cả hai điều này tắt hẳn: ảnh
-  bìa quay lại full-bleed, spotlight không render, bấm thẻ vẫn mở popup —
-  layout y hệt bản gốc.
+- Popup video là thẻ `<dialog>` của trình duyệt, mở bằng `showModal()`. Bốn
+  hành vi của một popup thật — Esc để đóng, Tab không lọt ra ngoài, trang phía
+  sau thành inert, con trỏ bàn phím trả về đúng thẻ đã bấm — đều là của nền
+  tảng, trước đây phải tự viết tay. Mọi đường đóng đều đi qua `dialog.close()`
+  và chỉ một chỗ duy nhất báo cho React: đóng kiểu khác thì iframe còn sống và
+  tiếp tục phát tiếng từ một cái hộp không ai thấy.
+- **Hai mốc chứ không phải một**, cả hai nằm trong `src/lib/breakpoints.ts` và
+  được cả CSS lẫn JS đọc từ đó:
+  - `WIDE` = `min-width: 700px` **và** `min-height: 600px` — mốc mở layout hai
+    cột, cột identity dính lại khi cuộn. 700px là chỗ thẻ video lần đầu rộng
+    hơn cột 300px bên cạnh nó; điều kiện chiều cao là để loại điện thoại nằm
+    ngang (852×393 — thừa bề ngang nhưng cột identity sẽ ăn một phần ba màn).
+  - `HAS_SPOTLIGHT` = `WIDE` **cộng** `pointer: fine` — mốc cho phép spotlight
+    tồn tại, tức là **chỉ desktop**. Không dùng `min-width` cao hơn vì bề ngang
+    không trả lời được câu này: iPad Pro 12.9" nằm ngang là 1366px, rộng hơn
+    phần lớn laptop. Cái phân biệt là thiết bị trỏ.
+- Ba bậc, không phải hai. Dưới `WIDE` mọi thứ xếp dọc: ảnh bìa full-bleed, bấm
+  thẻ mở popup — y hệt bản gốc. Giữa hai mốc (tablet dựng đứng) có hai cột nhưng
+  không có spotlight, bấm thẻ vẫn mở popup. Từ `HAS_SPOTLIGHT` mới có đủ cả ba.
 - Spotlight là một **dải chiếu cao cố định** (`clamp(382px, 62dvh, 560px)`), nền
   tối, và mọi thứ chỉ thay đổi *bên trong* nó: ảnh tĩnh phủ kín dải, player thì
   lấy đúng tỉ lệ của video và nằm giữa. Nhờ vậy bấm phát không làm trang nhảy
   một pixel nào — trước đó ảnh tĩnh cao cố định 380px còn player tự cao theo
   video, nên ở màn 1280×800 một cú bấm đẩy trang xuống 265px và bóp dải từ
   1239px còn 315px.
-- 13 trong 15 video là 9:16, nên phần lớn thời gian player chỉ chiếm một phần
+- 14 trong 16 video là 9:16, nên phần lớn thời gian player chỉ chiếm một phần
   tư dải. Chỗ còn lại là chính tấm thumbnail đó phóng to và làm mờ
   (`blur(36px)`) — màu của video tràn ra quanh nó thay vì để lại một khoảng
   trắng. Ảnh mờ dùng `sizes="320px"`, ra đúng tile 640w mà thẻ trong reel đã
@@ -183,11 +197,31 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
   xem trước của Claude Code chẳng hạn, nuốt luôn mọi yêu cầu fullscreen, kể cả
   của chính trang (`document.documentElement.requestFullscreen()` treo vĩnh
   viễn, không resolve cũng không reject). Trên trình duyệt thật thì bình thường.
-- Dòng liên hệ cuối (số điện thoại) có **lá cờ Việt Nam ở đầu bên kia**, cỡ
-  30×20 — không còn chữ "Based in Vietnam" bên cạnh, nên lá cờ tự nó là câu nói
-  đó và `aria-label` của nó là chỗ duy nhất còn ghi. Đẩy sang phải bằng
-  `margin-left: auto` chứ không phải `space-between`: `space-between` sẽ tách
-  luôn icon điện thoại khỏi con số nó đứng trước.
+- Hàng liên hệ là **lá cờ bên trái, bốn icon bên phải**, dàn hai đầu bằng
+  `space-between`. Đọc từ trên xuống ra "tên / vai trò / quốc gia ---- cách liên
+  lạc": cờ thuộc về hai dòng chữ phía trên nó, còn thứ bấm được thì gom hết về
+  đầu kia. Không còn chữ "Based in Vietnam" bên cạnh, nên lá cờ tự nó là câu nói
+  đó và `aria-label` của nó là chỗ duy nhất còn ghi.
+- Bốn icon nằm trong **một viên nang viền mảnh**, không phải bốn cái nền riêng.
+  Gom lại vì thẻ identity vốn đã là một mặt phẳng nổi có đổ bóng — bốn hộp nổi
+  đặt lên nó là độ cao chồng độ cao. Viên nang vẫn làm đúng việc cần: nó là thứ
+  tách bốn cái bấm được khỏi lá cờ đứng trần bên ngoài. Nền viên nang là trắng
+  còn viền nặng hơn `--color-divider` một chút, vì nó phải giữ được trên hai
+  nền khác nhau — xám của trang khi xếp dọc, và trắng của cột identity.
+- Mỗi icon là ô **44×44**, đúng chuẩn vùng chạm của cả iOS lẫn Android, và bốn ô
+  kề khít nhau: không có khe rơi vào giữa, cũng không chồng lấn để sinh ra vùng
+  mập mờ. Thứ tự Instagram → Facebook → Gmail → Phone đi từ việc dễ nhất tới
+  việc nặng nhất: gọi điện cắt ngang, xảy ra ngay, không soạn trước được, nên
+  nó đứng cuối chỗ mắt dừng lại.
+- Icon Facebook và Instagram **mở thẳng ứng dụng trên điện thoại**. `href` vẫn
+  là link https bình thường nên desktop, máy không bật JS và crawler dùng nguyên
+  nó; deeplink chỉ chen vào ở tầng click. Android nhận URL `intent://` — dạng
+  này tự mang theo địa chỉ dự phòng, Chrome tự chọn giữa app và web, không thể
+  hỏng. iOS không có dạng tương đương nên thử scheme rồi hẹn giờ quay về web,
+  `visibilitychange` huỷ hẹn giờ ngay khi app chiếm màn hình. Giá phải trả của
+  nhánh iOS: ai không cài app sẽ thấy một alert của Safari trước khi rơi về web
+  — xoá khối `ios` trong `src/components/AppLink.tsx` là bỏ được, Universal Link
+  của iOS tự gánh phần còn lại.
 - Ở layout hai cột, **reel nằm bên trái và khối identity nằm bên phải** — công
   việc dẫn trước, danh tính đứng cạnh. Thứ tự trong markup thì ngược lại:
   identity vẫn là phần tử đầu tiên, vì khi xếp dọc nó là header của trang và
@@ -197,16 +231,21 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
 - Ảnh bìa **giữ nguyên khung gốc**, không lật. Anh ấy được chụp nghiêng nhìn về
   bên trái; với cột identity nằm bên phải thì ánh nhìn đó vốn đã hướng vào trong
   trang, về phía reel.
-- Reel có hai cách đi hết danh sách: dưới 900px là "Load more", từ 900px trở lên
-  là **sang trang, 6 video một trang**. Sáu vì lưới ở cỡ đó là 3 cột ở 1280px và
-  2 cột từ 900–1228px — sáu chia hết cho cả hai nên hàng cuối không bao giờ bị
-  lẻ. Cả hai chế độ dùng **cùng một biến state** ("khách đã xin đi sâu thêm mấy
-  lần"), mỗi bên đọc theo cách của mình, nên co giãn cửa sổ qua mốc 900px vẫn
-  giữ đúng chỗ đang xem chứ không nhảy về đầu.
-- Dòng "Camera Operator - Editor" và lá cờ Việt Nam dàn hai đầu một hàng. Trong
-  cột trái hẹp (300px) chỉ còn lá cờ: hai đoạn chữ cộng lại cần 291px mà cột chỉ
-  có 277px. Lá cờ được vẽ bằng SVG chứ không dùng emoji 🇻🇳 — Chrome trên
-  Windows vẽ emoji đó thành hai chữ "VN".
+- Reel có hai cách đi hết danh sách: dưới `WIDE` là "Load more", từ `WIDE` trở
+  lên là **sang trang, 6 video một trang**. Sáu vì lưới ở layout đó chạy 1 cột
+  từ 700px, 2 cột từ 942px và 3 cột ở bề ngang tối đa 1280px — sáu là số nhỏ
+  nhất chia hết cho cả ba, nên hàng cuối không bao giờ lẻ ở cỡ này để chiều cỡ
+  kia. Cả hai chế độ dùng **cùng một biến state** ("khách đã xin đi sâu thêm mấy
+  lần"), mỗi bên đọc theo cách của mình, nên co giãn cửa sổ qua mốc vẫn giữ đúng
+  chỗ đang xem chứ không nhảy về đầu.
+- Dải 622–699px bị **ghim về một cột** dù lưới `auto-fit` thừa chỗ cho hai. Nếu
+  không ghim, cửa sổ nới từ 600 lên 700 sẽ đi một cột → hai cột → rồi tụt lại
+  một cột khi cột identity xuất hiện. Ghim rồi thì 700px là mốc duy nhất có gì
+  đó thay đổi.
+- Lá cờ được vẽ bằng SVG chứ không dùng emoji 🇻🇳 — Chrome trên Windows vẽ
+  emoji đó thành hai chữ "VN". Bốn icon liên hệ cũng vẽ tay vì lucide đã bỏ bộ
+  brand, và chúng không phải icon giao diện: logo Gmail là bốn màu cụ thể xếp
+  theo một cách cụ thể, vẽ xấp xỉ thì thành hàng nhái.
 - **Favicon và mã QR** không sửa tay được — cả hai đều là output của script.
   Logo gốc nằm ở `tools/logo-source.jpg`; `sh tools/trace-icon.sh` cắt, phóng to,
   rồi vector hoá nó bằng `potrace` thành `src/app/icon.svg` (cần
