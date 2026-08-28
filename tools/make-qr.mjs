@@ -20,7 +20,7 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import QR from "qrcode";
 
-const URL_ = "https://namanh-portfolio.vercel.app";
+const URL_ = "https://namanhnguyenngoc.vercel.app";
 const at = (p) => fileURLToPath(new URL(p, import.meta.url));
 const OUT = at("../public/qr.svg");
 
