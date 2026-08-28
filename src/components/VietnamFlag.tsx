@@ -17,11 +17,14 @@ type Props = {
  * a red rectangle on a light page reads as a colour swatch.
  *
  * The corner radius is not part of the flag either. It is here because this
- * sits at the end of a row of contact marks, one of which is a rounded square
- * and two of which are discs: a bare right angle was the only hard corner in
- * the line and read as a different kind of object. `non-scaling-stroke` keeps
- * the border a true hairline as the flag grows with them, rather than
- * thickening in proportion.
+ * sits at the head of a row whose every other corner is rounded — the pill on
+ * the same line, the card behind it and the reel beside it all carry the
+ * system's 4px, and the Instagram mark inside the pill is a rounded square. A
+ * bare right angle was the only hard corner in the line and read as a different
+ * kind of object. It stays small rather than matching the 4px: this is a
+ * national flag at 33px, not a component. `non-scaling-stroke` keeps the border
+ * a true hairline as the flag grows with the marks, rather than thickening in
+ * proportion.
  */
 export function VietnamFlag({ size = 15, label }: Props) {
   return (

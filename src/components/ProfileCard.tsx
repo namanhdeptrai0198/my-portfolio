@@ -4,12 +4,21 @@ import { VietnamFlag } from "./VietnamFlag";
 import styles from "./ProfileCard.module.css";
 
 /**
- * The flag is 3:2, so this is the width that makes it exactly as tall as the
- * marks beside it — the thing that decides whether it reads as part of their
- * row or as something parked at the end of it. Derived rather than typed so the
- * two cannot drift: change MARK_SIZE and the flag follows.
+ * Matched to the marks beside it, but to their ink rather than to their boxes.
+ *
+ * 1.5 used to be right, because it made the flag exactly as tall as a mark and
+ * the marks were filled tiles that used their whole box. Drawn as outlines they
+ * only cover the middle 20 units of their 24-unit grid, so a flag built to the
+ * full box now stands taller than every glyph in the row — and it is the one
+ * solid block of colour among four thin grey strokes, so it was already winning
+ * the row on weight alone. It is a fact about him; the four things beside it are
+ * what a client came to press. 1.25 is 20/24 of the old ratio: the flag now
+ * measures what the glyphs actually draw.
+ *
+ * Still derived rather than typed, so the two cannot drift: change MARK_SIZE
+ * and the flag follows.
  */
-const FLAG_SIZE = MARK_SIZE * 1.5;
+const FLAG_SIZE = MARK_SIZE * 2;
 
 /**
  * Name, role and the ways to reach him. On a wide screen this is the right

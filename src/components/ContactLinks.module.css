@@ -6,20 +6,38 @@
  * into a single outlined pill they read as one control, which is both calmer
  * and a truer description: they are one row of ways to reach the same person.
  *
- * The pill still does the job the chips were added for. It is what separates
- * these from the flag at the other end of the row — the flag stands bare
- * outside it and is plainly not part of it, which is a cleaner distinction than
- * four boxes against one bare mark ever was.
+ * The pill was a nicety when the marks were brand tiles; with them drawn as
+ * outlines it is load-bearing. A grey glyph on a white card has nothing about
+ * it that says it can be pressed — the colours used to say it. This ring is now
+ * the only thing that does, which is why it stays even where it is redundant.
  *
- * A hairline instead of a shadow, and a full 999px cap instead of the system's
- * 4px corner: nothing on this card should look like it is floating above the
- * card, and at this size a rounded rectangle reads as an app icon.
+ * It also still separates these from the flag at the other end of the row — the
+ * flag stands bare outside it and is plainly not part of it, which is a cleaner
+ * distinction than four boxes against one bare mark ever was.
  *
- * The fill is the raised white and the border a shade heavier than
+ * A hairline instead of a shadow, so nothing on this card looks like it is
+ * floating above the card, and the system's own 4px component corner — the one
+ * the cards, the identity column, the spotlight band and the aspect filter
+ * directly under this all carry. It was a full 999px cap for as long as the
+ * marks were app tiles, where a rounded rectangle would have read as a fifth
+ * icon rather than as the box around four; drawn as outlines they no longer
+ * ask for that, and the cap was the one shape on the page belonging to no
+ * system at all.
+ *
+ * `overflow: hidden` comes with the corner. It is what clips the end marks'
+ * hover wash back inside it — the same construction `.seg` uses in
+ * industry.css, which is the nearest relative this control has on the page.
+ *
+ * The fill is the raised white and the border much heavier than
  * --color-divider, because the pill has to hold on both grounds. Stacked, it is
  * white on the page's grey and the fill alone draws it. In the sticky column it
  * is white on white, and the ring is the only thing left — at the divider's 10%
- * it had all but vanished there.
+ * it had all but vanished there, and even at 16% it was invisible at size once
+ * the marks stopped being coloured tiles drawing the eye to it.
+ *
+ * 24% is deliberately heavier than the card's own border. The card is a
+ * container and the pill is a control; the one you can press should be the one
+ * drawn more firmly.
  *
  * No margin of its own. This sits inside a centred flex row next to the flag,
  * and `align-items: center` centres margin boxes, not content — a bottom margin
@@ -30,8 +48,9 @@
   display: inline-flex;
   align-items: center;
   margin: 0;
-  border: 1px solid color-mix(in srgb, var(--color-text) 16%, transparent);
-  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-text) 24%, transparent);
+  border-radius: var(--radius-md);
+  overflow: hidden;
   background: var(--color-raised);
 }
 
@@ -39,14 +58,23 @@
    of a tap target, so the target is the visible thing and there is no
    pseudo-element stretching past it. The four tile edge to edge: no gap to fall
    between them, and no overlap to make the boundary ambiguous.
-   The hover circle is 44px inside a pill whose inner height is also 44px, so it
-   meets the top and bottom exactly, and at the ends its radius is the pill's
-   own cap radius — the wash lands on the pill rather than inside it. */
+   No corner of their own: each wash is a 44px square filling its whole share of
+   a pill whose inner height is also 44px, and the two on the ends are cut back
+   to the pill's corner by its `overflow: hidden`. A circle here would have sat
+   inside the box with a gap at either end — which is what the old 999px cap
+   hid, by being exactly the circle's own radius. */
 .link {
   display: inline-flex;
   padding: 9px;
-  border-radius: 50%;
-  transition: background 140ms ease;
+  /* Every mark is `currentColor`, so the row's whole colour is this one line.
+     Not the full --color-text: four black glyphs sat at the same weight as the
+     name above them, and these are a utility under it, not a second headline.
+     neutral-700 measures 6.6:1 on the card's white and 5.3:1 on the page's
+     grey, so quieter here costs no legibility on either ground it sits on. */
+  color: var(--color-neutral-700);
+  transition:
+    background 140ms ease,
+    color 140ms ease;
 }
 
 /* An ink wash rather than a colour: this card sits on two grounds — the white
@@ -55,15 +83,25 @@
    It tints and nothing more. The lift-on-hover the chips had is the gesture of
    an app icon; holding still while the ground darkens under the mark is the
    quieter version of the same signal. */
-.link:hover {
+/* Two things move now, not one: the ground darkens and the mark comes up to
+   full text colour. With the brand colours gone the wash alone was a very small
+   event, and the mark darkening is the part that reads at a glance.
+   `:focus-visible` takes the same colour so a keyboard gets the same answer the
+   mouse does — the ring says where you are, this says what it is. */
+.link:hover,
+.link:focus-visible {
   background: color-mix(in srgb, var(--color-text) 7%, transparent);
+  color: var(--color-text);
 }
 
 .link:active {
   background: color-mix(in srgb, var(--color-text) 13%, transparent);
+  color: var(--color-text);
 }
 
-/* Inside the pill, so the ring does not straddle its hairline. */
+/* Inside the pill, so the ring does not straddle its hairline — and it has to
+   be inside now that `overflow: hidden` would clip anything drawn outside. The
+   same -2px `.seg` uses for the same reason. */
 .link:focus-visible {
-  outline-offset: -3px;
+  outline-offset: -2px;
 }
