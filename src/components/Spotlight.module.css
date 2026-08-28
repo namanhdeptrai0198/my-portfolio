@@ -1,7 +1,8 @@
-/* Shown on a desktop and nowhere else — this query is lib/breakpoints.ts's
-   HAS_SPOTLIGHT, which is the two-column layout's own query plus `pointer:
-   fine`, and PlaybackProvider asks the same one in JavaScript. Keep the three
-   identical.
+/* Shown wherever the page is in its two-column layout, and nowhere else — this
+   query is lib/breakpoints.ts's WIDE, the same one page.module.css lays the
+   columns out with and PlaybackProvider asks in JavaScript. Keep the three
+   identical: CSS hiding the strip while JS still believes in it would send a
+   picked video to an element nobody can see.
    The strip is not merely hidden where it is absent, it is *replaced*: the
    identity block carries the cover photo there (see CoverBanner +
    page.module.css) and a picked video opens in the dialog instead, so nothing
@@ -10,7 +11,7 @@
   display: none;
 }
 
-@media (min-width: 700px) and (min-height: 600px) and (pointer: fine) {
+@media (min-width: 700px) and (min-height: 600px) {
   .section {
     display: block;
     /* Inset by the same gutter `.body` uses, so this strip's edges line up

@@ -16,8 +16,8 @@
  * beside it, and the height floor keeps a phone held sideways, wide enough on
  * paper but 393px tall, out of a layout whose identity column would eat a third
  * of it. Keep this query character-for-character identical to WIDE there.
- * Spotlight.module.css deliberately asks for more than this — the strip is
- * desktop-only, while these two columns are not.
+ * Spotlight.module.css asks for exactly this and nothing more — the strip and
+ * these two columns arrive together.
  *
  * The horizontal gutter moves up to `.body` so both columns share one; setting
  * `--page-pad: 0` is how the children are told to stop adding their own, since

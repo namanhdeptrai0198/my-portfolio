@@ -10,7 +10,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { HAS_SPOTLIGHT } from "@/lib/breakpoints";
+import { WIDE } from "@/lib/breakpoints";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import type { Video } from "@/data/videos";
 import { VideoModal } from "./VideoModal";
@@ -55,15 +55,15 @@ type Props = {
  *
  * The same click means two different things depending on where the video can
  * play, which is the one thing CSS cannot express here: where there is a
- * spotlight, a card sends its video up there and starts it; everywhere else it
+ * spotlight, a card sends its video up there and starts it; below the switch it
  * opens the dialog, exactly as before.
  *
- * Note this is HAS_SPOTLIGHT, not WIDE. A tablet upright gets the two-column
- * layout but no strip to play in, so it takes the dialog — the same branch a
- * phone takes, for a different reason.
+ * `WIDE` is the whole test — the strip exists exactly where the two columns do —
+ * so this and Spotlight.module.css cannot come to different conclusions about
+ * whether there is anywhere to play.
  */
 export function PlaybackProvider({ initial, children }: Props) {
-  const hasSpotlight = useMediaQuery(HAS_SPOTLIGHT);
+  const hasSpotlight = useMediaQuery(WIDE);
   const [featured, setFeatured] = useState<Video | null>(initial);
   const [playing, setPlaying] = useState(false);
   const [modal, setModal] = useState<Video | null>(null);

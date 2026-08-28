@@ -121,11 +121,11 @@ function Ambient({ video }: { video: Video }) {
 }
 
 /**
- * The strip at the top of the desktop layout, and the one place video plays
+ * The strip at the top of the two-column layout, and the one place video plays
  * there — picking anything in the reel sends it up here rather than opening a
- * dialog over it. Absent everywhere else (see Spotlight.module.css), including
- * on a tablet upright, which keeps the two columns but not this: the reel falls
- * back to the dialog and the identity block carries the cover photo instead.
+ * dialog over it. Absent below that layout (see Spotlight.module.css), where
+ * the reel falls back to the dialog and the identity block carries the cover
+ * photo instead.
  *
  * Until the visitor picks something this is a still of `spotlightId`, and the
  * image is deliberately not `priority`: while the section is `display: none`

@@ -1,8 +1,10 @@
 /**
- * The query where the layout changes shape, written once because three files
- * have to agree on it: the `@media` block in app/page.module.css, and
- * VideoGallery, which asks the same question in JavaScript because a reel that
- * has become a column beside a fixed card turns pages instead of growing.
+ * The one query where the layout changes shape, written once because four
+ * places have to agree on it: the `@media` blocks in app/page.module.css and
+ * Spotlight.module.css, and — through useMediaQuery, in JavaScript —
+ * VideoGallery, because a reel that has become a column beside a fixed card
+ * turns pages instead of growing, and PlaybackProvider, because a picked video
+ * goes up to the strip where there is one and into a dialog where there is not.
  *
  * Two conditions, because two different things have to be true.
  *
@@ -25,29 +27,13 @@
  *
  * The quantities behind the width live in page.module.css (column, gap,
  * gutter) and VideoGallery.module.css (track).
+ *
+ * This was two queries until now. The spotlight had its own — this one plus
+ * `pointer: fine` — which kept the strip away from anything driven by a finger,
+ * so a tablet upright got the two columns and no strip. That distinction is
+ * gone: where there are two columns there is now a spotlight, touchscreen or
+ * not. The cost it was buying off is real and now paid on those devices — the
+ * strip opens at 62dvh (see `--band-h`) before any work is visible, which on a
+ * tablet held upright is most of the first screen.
  */
 export const WIDE = "(min-width: 700px) and (min-height: 600px)";
-
-/**
- * Everything WIDE asks, and then one more thing: that a mouse or a trackpad is
- * driving the page. Where the spotlight is allowed to exist — the `@media`
- * block in Spotlight.module.css, and PlaybackProvider, which sends a picked
- * video up to the strip here and opens the dialog everywhere else.
- *
- * `pointer: fine` rather than a wider `min-width`, because width cannot answer
- * this question. A 12.9" iPad on its side is 1366px across, wider than most of
- * the laptops this is meant for, so any width high enough to exclude it would
- * take real desktops with it. What actually separates them is the input:
- * iPadOS reports a coarse primary pointer even with the keyboard case attached,
- * while a laptop reports a fine one.
- *
- * The cost, and it is the intended one: a touchscreen laptop being used in
- * tablet mode with no mouse reports coarse too, and gets the reel's dialog
- * rather than the strip. That is the right answer for how it is being held.
- *
- * The spotlight is the one thing on the page that opens at 62dvh before any
- * work is visible (see `--band-h`), which is affordable on a desktop where the
- * first row of cards clears the fold anyway, and not on a tablet held upright,
- * where it costs the whole first screen.
- */
-export const HAS_SPOTLIGHT = `${WIDE} and (pointer: fine)`;

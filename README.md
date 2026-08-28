@@ -90,16 +90,17 @@ sips -Z 2400 -s formatOptions 82 ~/duong-dan/anh-goc.jpg --out public/images/cov
    phần trên của ảnh. Vì ảnh dùng chung cho cả hai kiểu cắt (ngang và vuông),
    kiểm tra lại cả hai cỡ màn hình sau khi đổi số.
 
-**Video spotlight** (khung lớn phía trên cùng, **chỉ hiện trên desktop** — xem
-mục quyết định kỹ thuật bên dưới): mở `src/data/videos.ts`, sửa `spotlightId`
+**Video spotlight** (khung lớn phía trên cùng, **hiện ở layout hai cột** — tức
+desktop và tablet dựng đứng, xem mục quyết định kỹ thuật bên dưới): mở
+`src/data/videos.ts`, sửa `spotlightId`
 thành `id` của video muốn đưa lên đầu.
 Video đó vẫn nằm nguyên trong reel bên dưới — spotlight chỉ là một cách hiển
 thị thêm, không phải cắt nó ra khỏi danh sách.
 
 `spotlightId` chỉ quyết định video **mở màn**. Ở đâu có spotlight thì khách bấm
 thẻ nào trong reel, video đó lên spotlight và chạy ngay tại đó, không mở popup —
-nên bạn không cần sửa gì để họ xem được cái khác. Ở đâu không có (tablet và điện
-thoại) thì bấm thẻ vẫn mở popup như cũ.
+nên bạn không cần sửa gì để họ xem được cái khác. Ở đâu không có (màn hẹp, và
+điện thoại nằm ngang) thì bấm thẻ vẫn mở popup như cũ.
 
 Chiều cao dải spotlight nằm ở `--band-h` trong
 `src/components/Spotlight.module.css`. Đổi số đó là đổi luôn cả ảnh tĩnh và
@@ -167,19 +168,21 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
   tảng, trước đây phải tự viết tay. Mọi đường đóng đều đi qua `dialog.close()`
   và chỉ một chỗ duy nhất báo cho React: đóng kiểu khác thì iframe còn sống và
   tiếp tục phát tiếng từ một cái hộp không ai thấy.
-- **Hai mốc chứ không phải một**, cả hai nằm trong `src/lib/breakpoints.ts` và
-  được cả CSS lẫn JS đọc từ đó:
-  - `WIDE` = `min-width: 700px` **và** `min-height: 600px` — mốc mở layout hai
-    cột, cột identity dính lại khi cuộn. 700px là chỗ thẻ video lần đầu rộng
-    hơn cột 300px bên cạnh nó; điều kiện chiều cao là để loại điện thoại nằm
-    ngang (852×393 — thừa bề ngang nhưng cột identity sẽ ăn một phần ba màn).
-  - `HAS_SPOTLIGHT` = `WIDE` **cộng** `pointer: fine` — mốc cho phép spotlight
-    tồn tại, tức là **chỉ desktop**. Không dùng `min-width` cao hơn vì bề ngang
-    không trả lời được câu này: iPad Pro 12.9" nằm ngang là 1366px, rộng hơn
-    phần lớn laptop. Cái phân biệt là thiết bị trỏ.
-- Ba bậc, không phải hai. Dưới `WIDE` mọi thứ xếp dọc: ảnh bìa full-bleed, bấm
-  thẻ mở popup — y hệt bản gốc. Giữa hai mốc (tablet dựng đứng) có hai cột nhưng
-  không có spotlight, bấm thẻ vẫn mở popup. Từ `HAS_SPOTLIGHT` mới có đủ cả ba.
+- **Một mốc duy nhất**, `WIDE` trong `src/lib/breakpoints.ts`, được cả CSS lẫn
+  JS đọc từ đó: `min-width: 700px` **và** `min-height: 600px`. 700px là chỗ thẻ
+  video lần đầu rộng hơn cột 300px bên cạnh nó; điều kiện chiều cao là để loại
+  điện thoại nằm ngang (852×393 — thừa bề ngang nhưng cột identity sẽ ăn một
+  phần ba màn).
+- Hai bậc, không phải ba. Dưới `WIDE` mọi thứ xếp dọc: ảnh bìa full-bleed, bấm
+  thẻ mở popup — y hệt bản gốc. Từ `WIDE` trở lên có đủ cả ba: hai cột, cột
+  identity dính lại khi cuộn, và spotlight.
+- Trước đây spotlight có mốc riêng — `WIDE` **cộng** `pointer: fine` — nên
+  tablet dựng đứng có hai cột mà không có spotlight. Đã bỏ: bây giờ ở đâu có
+  hai cột thì ở đó có spotlight, kể cả màn cảm ứng. Cái giá mà `pointer: fine`
+  đang tránh là có thật và giờ phải trả trên những máy đó — dải spotlight mở ở
+  62dvh trước khi thấy video nào, trên tablet cầm dọc là gần trọn màn hình đầu.
+  Muốn quay lại, thêm ` and (pointer: fine)` vào cả `WIDE` lẫn `@media` trong
+  `Spotlight.module.css` — hoặc tách lại thành hai hằng số như cũ.
 - Spotlight là một **dải chiếu cao cố định** (`clamp(382px, 62dvh, 560px)`), nền
   tối, và mọi thứ chỉ thay đổi *bên trong* nó: ảnh tĩnh phủ kín dải, player thì
   lấy đúng tỉ lệ của video và nằm giữa. Nhờ vậy bấm phát không làm trang nhảy
