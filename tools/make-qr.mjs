@@ -1,7 +1,7 @@
 /**
  * Rebuild public/qr.svg — the code that points a phone camera at the site.
  *
- *   node tools/make-qr.js
+ *   node tools/make-qr.mjs
  *
  * Run this whenever the site's URL changes. A QR code is opaque: nobody proofreads
  * one, so a stale code goes on being scanned and going to the wrong place long
@@ -10,11 +10,12 @@
  * Level H is the point of the whole thing. It tolerates losing about 30% of the
  * symbol, which is the budget the mark in the centre spends. The mark covers 9 of
  * the 37 modules across, so under 6% of the area — a wide margin, but the margin
- * is not the evidence. Both the plain and the branded symbol were rasterised at
- * 720, 360 and 180px and fed back through a decoder (jsQR), and all six reads
- * returned the URL exactly. That check lives outside this script because it needs
- * a browser canvas to rasterise; if you change the size or position of the mark,
- * redo it rather than trusting the percentage.
+ * is not the evidence. `sh tools/verify-qr.sh` is: it rasterises the branded
+ * symbol and a logo-less copy at 720, 360 and 180px and reads all six back with
+ * Apple's Vision detector, the one an iPhone camera uses. Run it after changing
+ * the URL, the size or the position of the mark, rather than trusting the
+ * percentage. It is a separate script because decoding needs a rasteriser and a
+ * detector this script has no other use for.
  */
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";

@@ -259,9 +259,12 @@ Vercel tự build lại và cập nhật trang sau khoảng 1 phút.
   biệt được. Nhoè mạnh hơn nữa thì bốn góc vuông bắt đầu tròn đi.
 - Mã QR (`public/qr.svg`, sinh bởi `node tools/make-qr.mjs`) dùng mức sửa lỗi
   **H** — chịu mất được ~30% diện tích, và đó là ngân sách để nhét logo vào
-  giữa. Chạy lại script mỗi khi đổi domain: không ai đọc soát được một mã QR,
-  nên mã sai domain vẫn cứ được quét và dẫn sai rất lâu sau khi một cái link
-  hỏng trong bài viết đã bị phát hiện. Kiểm bằng cách render ra ảnh ở 720 / 360 /
-  180px rồi **giải mã ngược** (jsQR) cả bản trơn lẫn bản có logo — 6/6 đều ra
-  đúng URL. Đổi cỡ hay vị trí logo thì kiểm lại như vậy, đừng tin vào phần trăm
-  diện tích.
+  giữa. Domain nằm ngay đầu script, đổi domain thì sửa dòng đó rồi chạy lại:
+  không ai đọc soát được một mã QR, nên mã sai domain vẫn cứ được quét và dẫn
+  sai rất lâu sau khi một cái link hỏng trong bài viết đã bị phát hiện.
+- Sửa xong thì chạy `sh tools/verify-qr.sh` để **giải mã ngược**: script render
+  cả bản có logo lẫn bản trơn ở 720 / 360 / 180px rồi đọc lại bằng Vision của
+  Apple — đúng bộ nhận diện mà camera iPhone dùng — và bắt buộc cả 6 ảnh phải ra
+  đúng URL trong `make-qr.mjs`. Có bản trơn để nếu hỏng thì biết là do logo hay
+  do chính mã; có 180px vì QR in trên name card được quét ở cỡ đó. Đổi cỡ hay vị
+  trí logo cũng chạy lại, đừng tin vào phần trăm diện tích.
